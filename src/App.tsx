@@ -1,6 +1,6 @@
 import React from "react";
-import { PostsList } from "./components";
+import { UsersList } from "./components";
 
 export const App: React.FC = () => {
-  return <PostsList />;
+  return <UsersList />;
 };
