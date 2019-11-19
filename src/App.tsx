@@ -1,6 +1,11 @@
 import React from "react";
-import { UsersList } from "./components";
+import { UsersList, KudosList } from "./components";
 
 export const App: React.FC = () => {
-  return <UsersList />;
+  return (
+    <div>
+      <UsersList />
+      <KudosList />
+    </div>
+  );
 };
