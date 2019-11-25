@@ -3,10 +3,11 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { User } from "./users-list";
 
-interface Kudos {
+export interface Kudos {
   id: string;
   title: string;
   author: User;
+  recipient: User;
 }
 
 interface KudosData {
@@ -19,6 +20,10 @@ const GET_KUDOS = gql`
       id
       title
       author {
+        id
+        name
+      }
+      recipient {
         id
         name
       }
@@ -38,7 +43,8 @@ export const KudosList: React.FC = () => {
           {data &&
             data.kudoses.map((kudos: Kudos) => (
               <div key={kudos.id}>
-                {kudos.title} by {kudos.author.name}
+                {kudos.title} written by {kudos.author.name} sent to{" "}
+                {kudos.recipient.name}
               </div>
             ))}
         </div>
