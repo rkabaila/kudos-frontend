@@ -23,7 +23,7 @@ interface KudosData {
   kudoses: Kudos[];
 }
 
-const GET_KUDOS = gql`
+const GET_KUDOSES = gql`
   query {
     kudoses {
       id
@@ -58,7 +58,7 @@ const DELETE_KUDOS = gql`
 `;
 
 export const KudosList: React.FC = () => {
-  const { loading, data } = useQuery<KudosData>(GET_KUDOS);
+  const { loading, data } = useQuery<KudosData>(GET_KUDOSES);
   const [addKudos] = useMutation(ADD_KUDOS);
   const [deleteKudos] = useMutation(DELETE_KUDOS);
 
@@ -71,6 +71,7 @@ export const KudosList: React.FC = () => {
         <Column>
           <Column>
             {data &&
+              data.kudoses &&
               data.kudoses.map((kudos: Kudos) => (
                 <Row key={kudos.id}>
                   <DataWrapper>{kudos.id} </DataWrapper>

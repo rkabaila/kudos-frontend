@@ -15,8 +15,8 @@ import { Form, Field, Formik } from "formik";
 export interface User {
   id: string;
   name: string;
-  ownKudos: Kudos[];
-  writtenKudos: Kudos[];
+  ownKudoses: Kudos[];
+  writtenKudoses: Kudos[];
 }
 
 interface UsersData {
@@ -28,11 +28,11 @@ const GET_USERS = gql`
     users {
       id
       name
-      ownKudos {
+      ownKudoses {
         id
         title
       }
-      writtenKudos {
+      writtenKudoses {
         id
         title
       }
@@ -40,9 +40,9 @@ const GET_USERS = gql`
   }
 `;
 
-const GET_USER_OWN_KUDOS = gql`
+const GET_USER_OWN_KUDOSES = gql`
   query {
-    ownKudosByUser(userId: "ck35y0g9j00e50795h33k251s") {
+    userOwnKudoses(userId: "ck41cz2v900o70795hidedvpy") {
       id
       title
     }
@@ -51,7 +51,7 @@ const GET_USER_OWN_KUDOS = gql`
 
 const GET_USER_WRITTEN_KUDOS = gql`
   query {
-    writtenKudosByUser(userId: "ck35y0g9j00e50795h33k251s") {
+    userWrittenKudoses(userId: "ck41cz2v900o70795hidedvpy") {
       id
       title
     }
@@ -77,7 +77,7 @@ const DELETE_USER = gql`
 
 export const UsersList: React.FC = () => {
   const { loading, data } = useQuery<UsersData>(GET_USERS);
-  const { data: ownKudosData } = useQuery(GET_USER_OWN_KUDOS);
+  const { data: ownKudosData } = useQuery(GET_USER_OWN_KUDOSES);
   const { data: writtenKudosData } = useQuery(GET_USER_WRITTEN_KUDOS);
   const [addUser] = useMutation(ADD_USER);
   const [deleteUser] = useMutation(DELETE_USER);
@@ -93,11 +93,12 @@ export const UsersList: React.FC = () => {
         <Column>
           <Column>
             {data &&
+              data.users &&
               data.users.map((user: User) => {
-                const ownKudosText = user.ownKudos
+                const ownKudosText = user.ownKudoses
                   .map(kudos => kudos.title)
                   .join(", ");
-                const writtenKudosText = user.writtenKudos
+                const writtenKudosText = user.writtenKudoses
                   .map(kudos => kudos.title)
                   .join(", ");
 
