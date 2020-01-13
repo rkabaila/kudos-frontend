@@ -4,11 +4,13 @@ import gql from "graphql-tag";
 import { Kudos } from "./kudos-list";
 import {
   Row,
-  DataWrapper,
+  CellWrapper,
   AddButton,
   DeleteButton,
   Column,
-  FormWrapper
+  FormWrapper,
+  HeaderWrapper,
+  RowWrapper
 } from "./styled";
 import { Form, Field, Formik } from "formik";
 
@@ -91,32 +93,33 @@ export const UsersList: React.FC = () => {
         <p>Loading ...</p>
       ) : (
         <Column>
-          <Column>
-            {data &&
-              data.users &&
-              data.users.map((user: User) => {
-                const ownKudosText = user.ownKudoses
-                  .map(kudos => kudos.title)
-                  .join(", ");
-                const writtenKudosText = user.writtenKudoses
-                  .map(kudos => kudos.title)
-                  .join(", ");
+          <HeaderWrapper>
+            <CellWrapper> User id </CellWrapper>
+            <CellWrapper>User name </CellWrapper>
+            <CellWrapper>Own kudos</CellWrapper>
+            <CellWrapper>Written kudos</CellWrapper>
+          </HeaderWrapper>
 
-                return (
-                  <Column key={user.id}>
-                    <Row>
-                      <DataWrapper> {user.id} </DataWrapper>
-                      <DataWrapper>{user.name} </DataWrapper>
-                      <DataWrapper>own kudos: {ownKudosText} </DataWrapper>
-                      <DataWrapper>
-                        {" "}
-                        written kudos: {writtenKudosText}
-                      </DataWrapper>
-                    </Row>
-                  </Column>
-                );
-              })}
-          </Column>
+          {data &&
+            data.users &&
+            data.users.map((user: User) => {
+              const ownKudosText = user.ownKudoses
+                .map(kudos => kudos.title)
+                .join(", ");
+              const writtenKudosText = user.writtenKudoses
+                .map(kudos => kudos.title)
+                .join(", ");
+
+              return (
+                <RowWrapper key={user.id}>
+                  <CellWrapper> {user.id} </CellWrapper>
+                  <CellWrapper>{user.name} </CellWrapper>
+                  <CellWrapper>{ownKudosText}</CellWrapper>
+                  <CellWrapper>{writtenKudosText}</CellWrapper>
+                </RowWrapper>
+              );
+            })}
+
           <Row>
             <FormWrapper>
               <Formik

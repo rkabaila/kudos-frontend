@@ -4,12 +4,14 @@ import gql from "graphql-tag";
 import { Formik, Form, Field } from "formik";
 import { User } from "./users-list";
 import {
-  DataWrapper,
+  CellWrapper,
   AddButton,
   DeleteButton,
   Column,
   Row,
-  FormWrapper
+  FormWrapper,
+  HeaderWrapper,
+  RowWrapper
 } from "./styled";
 
 export interface Kudos {
@@ -69,22 +71,26 @@ export const KudosList: React.FC = () => {
         <p>Loading ...</p>
       ) : (
         <Column>
-          <Column>
-            {data &&
-              data.kudoses &&
-              data.kudoses.map((kudos: Kudos) => (
-                <Row key={kudos.id}>
-                  <DataWrapper>{kudos.id} </DataWrapper>
-                  <DataWrapper>{kudos.title}</DataWrapper>{" "}
-                  <DataWrapper>
-                    written by {kudos.author && kudos.author.name}
-                  </DataWrapper>
-                  <DataWrapper>
-                    sent to {kudos.recipient && kudos.recipient.name}
-                  </DataWrapper>
-                </Row>
-              ))}
-          </Column>
+          <HeaderWrapper>
+            <CellWrapper>Kudos id</CellWrapper>
+            <CellWrapper>Kudos text</CellWrapper>
+            <CellWrapper>Author</CellWrapper>
+            <CellWrapper> Recipient</CellWrapper>
+          </HeaderWrapper>
+
+          {data &&
+            data.kudoses &&
+            data.kudoses.map((kudos: Kudos) => (
+              <RowWrapper key={kudos.id}>
+                <CellWrapper>{kudos.id} </CellWrapper>
+                <CellWrapper>{kudos.title}</CellWrapper>
+                <CellWrapper>{kudos.author && kudos.author.name}</CellWrapper>
+                <CellWrapper>
+                  {kudos.recipient && kudos.recipient.name}
+                </CellWrapper>
+              </RowWrapper>
+            ))}
+
           <Row>
             <FormWrapper>
               <Formik

@@ -1,8 +1,29 @@
 import styled from "@emotion/styled";
 
-export const DataWrapper = styled.div`
+export const Row = styled.div`
+  display: flex;
+`;
+
+export const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const CellWrapper = styled.div`
   padding: 0 10px;
   width: 200px;
+`;
+
+export const HeaderWrapper = styled(Row)`
+  margin-bottom: 10px;
+  font-weight: bold;
+`;
+
+export const RowWrapper = styled(Row)`
+  padding: 5px;
+  &:nth-child(even) {
+    background-color: #ededed;
+  }
 `;
 
 export const Button = styled.button`
@@ -21,15 +42,6 @@ export const DeleteButton = styled(Button)`
   background-color: red;
 `;
 
-export const Row = styled.div`
-  display: flex;
-`;
-
-export const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const FormWrapper = styled(Column)`
-  margin: 10px 40px;
+  margin: 40px;
 `;
