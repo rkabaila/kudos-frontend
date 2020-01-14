@@ -10,9 +10,13 @@ import {
   Column,
   FormWrapper,
   HeaderWrapper,
-  RowWrapper
+  RowWrapper,
+  FormSection,
+  StyledField,
+  Heading,
+  PageHeading
 } from "./styled";
-import { Form, Field, Formik } from "formik";
+import { Form, Formik } from "formik";
 
 export interface User {
   id: string;
@@ -88,39 +92,41 @@ export const UsersList: React.FC = () => {
 
   return (
     <Column>
-      <h3>Users</h3>
+      <PageHeading>Users</PageHeading>
       {loading ? (
         <p>Loading ...</p>
       ) : (
-        <Column>
-          <HeaderWrapper>
-            <CellWrapper> User id </CellWrapper>
-            <CellWrapper>User name </CellWrapper>
-            <CellWrapper>Own kudos</CellWrapper>
-            <CellWrapper>Written kudos</CellWrapper>
-          </HeaderWrapper>
+        <Row>
+          <Column>
+            <HeaderWrapper>
+              <CellWrapper> User id </CellWrapper>
+              <CellWrapper>User name </CellWrapper>
+              <CellWrapper>Own kudos</CellWrapper>
+              <CellWrapper>Written kudos</CellWrapper>
+            </HeaderWrapper>
 
-          {data &&
-            data.users &&
-            data.users.map((user: User) => {
-              const ownKudosText = user.ownKudoses
-                .map(kudos => kudos.title)
-                .join(", ");
-              const writtenKudosText = user.writtenKudoses
-                .map(kudos => kudos.title)
-                .join(", ");
+            {data &&
+              data.users &&
+              data.users.map((user: User) => {
+                const ownKudosText = user.ownKudoses
+                  .map(kudos => kudos.title)
+                  .join(", ");
+                const writtenKudosText = user.writtenKudoses
+                  .map(kudos => kudos.title)
+                  .join(", ");
 
-              return (
-                <RowWrapper key={user.id}>
-                  <CellWrapper> {user.id} </CellWrapper>
-                  <CellWrapper>{user.name} </CellWrapper>
-                  <CellWrapper>{ownKudosText}</CellWrapper>
-                  <CellWrapper>{writtenKudosText}</CellWrapper>
-                </RowWrapper>
-              );
-            })}
+                return (
+                  <RowWrapper key={user.id}>
+                    <CellWrapper> {user.id} </CellWrapper>
+                    <CellWrapper>{user.name} </CellWrapper>
+                    <CellWrapper>{ownKudosText}</CellWrapper>
+                    <CellWrapper>{writtenKudosText}</CellWrapper>
+                  </RowWrapper>
+                );
+              })}
+          </Column>
 
-          <Row>
+          <FormSection>
             <FormWrapper>
               <Formik
                 initialValues={{ name: "" }}
@@ -134,7 +140,8 @@ export const UsersList: React.FC = () => {
                 {() => (
                   <Form>
                     <Column>
-                      <Field type="text" name="name" placeholder="name" />
+                      <Heading>Add user</Heading>
+                      <StyledField type="text" name="name" placeholder="name" />
                       <AddButton type="submit"> Add user</AddButton>
                     </Column>
                   </Form>
@@ -154,15 +161,20 @@ export const UsersList: React.FC = () => {
                 {() => (
                   <Form>
                     <Column>
-                      <Field type="text" name="userId" placeholder="userId" />
+                      <Heading>Delete user</Heading>
+                      <StyledField
+                        type="text"
+                        name="userId"
+                        placeholder="userId"
+                      />
                       <DeleteButton type="submit">Delete user</DeleteButton>
                     </Column>
                   </Form>
                 )}
               </Formik>
             </FormWrapper>
-          </Row>
-        </Column>
+          </FormSection>
+        </Row>
       )}
     </Column>
   );

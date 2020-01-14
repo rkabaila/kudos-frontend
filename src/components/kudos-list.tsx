@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import { User } from "./users-list";
 import {
   CellWrapper,
@@ -11,7 +11,11 @@ import {
   Row,
   FormWrapper,
   HeaderWrapper,
-  RowWrapper
+  RowWrapper,
+  FormSection,
+  StyledField,
+  Heading,
+  PageHeading
 } from "./styled";
 
 export interface Kudos {
@@ -66,32 +70,34 @@ export const KudosList: React.FC = () => {
 
   return (
     <Column>
-      <h3>Kudos</h3>
+      <PageHeading>Kudos</PageHeading>
       {loading ? (
         <p>Loading ...</p>
       ) : (
-        <Column>
-          <HeaderWrapper>
-            <CellWrapper>Kudos id</CellWrapper>
-            <CellWrapper>Kudos text</CellWrapper>
-            <CellWrapper>Author</CellWrapper>
-            <CellWrapper> Recipient</CellWrapper>
-          </HeaderWrapper>
+        <Row>
+          <Column>
+            <HeaderWrapper>
+              <CellWrapper>Kudos id</CellWrapper>
+              <CellWrapper>Kudos text</CellWrapper>
+              <CellWrapper>Author</CellWrapper>
+              <CellWrapper> Recipient</CellWrapper>
+            </HeaderWrapper>
 
-          {data &&
-            data.kudoses &&
-            data.kudoses.map((kudos: Kudos) => (
-              <RowWrapper key={kudos.id}>
-                <CellWrapper>{kudos.id} </CellWrapper>
-                <CellWrapper>{kudos.title}</CellWrapper>
-                <CellWrapper>{kudos.author && kudos.author.name}</CellWrapper>
-                <CellWrapper>
-                  {kudos.recipient && kudos.recipient.name}
-                </CellWrapper>
-              </RowWrapper>
-            ))}
+            {data &&
+              data.kudoses &&
+              data.kudoses.map((kudos: Kudos) => (
+                <RowWrapper key={kudos.id}>
+                  <CellWrapper>{kudos.id} </CellWrapper>
+                  <CellWrapper>{kudos.title}</CellWrapper>
+                  <CellWrapper>{kudos.author && kudos.author.name}</CellWrapper>
+                  <CellWrapper>
+                    {kudos.recipient && kudos.recipient.name}
+                  </CellWrapper>
+                </RowWrapper>
+              ))}
+          </Column>
 
-          <Row>
+          <FormSection>
             <FormWrapper>
               <Formik
                 initialValues={{ title: "", authorId: "", recipientId: "" }}
@@ -111,13 +117,18 @@ export const KudosList: React.FC = () => {
                 {() => (
                   <Form>
                     <Column>
-                      <Field type="text" name="title" placeholder="title" />
-                      <Field
+                      <Heading>Add kudos</Heading>
+                      <StyledField
+                        type="text"
+                        name="title"
+                        placeholder="title"
+                      />
+                      <StyledField
                         type="text"
                         name="authorId"
                         placeholder="authorId"
                       />
-                      <Field
+                      <StyledField
                         type="text"
                         name="recipientId"
                         placeholder="recipientId"
@@ -140,16 +151,21 @@ export const KudosList: React.FC = () => {
               >
                 {() => (
                   <Form>
+                    <Heading>Delete kudos</Heading>
                     <Column>
-                      <Field type="text" name="kudosId" placeholder="kudosId" />
+                      <StyledField
+                        type="text"
+                        name="kudosId"
+                        placeholder="kudosId"
+                      />
                       <DeleteButton type="submit">Delete kudos</DeleteButton>
                     </Column>
                   </Form>
                 )}
               </Formik>
             </FormWrapper>
-          </Row>
-        </Column>
+          </FormSection>
+        </Row>
       )}
     </Column>
   );
