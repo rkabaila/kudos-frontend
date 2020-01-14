@@ -37,6 +37,10 @@ export const Button = styled.button`
   margin: 10px 0;
   cursor: pointer;
   border-radius: 5px;
+  &:hover,
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const AddButton = styled(Button)`
@@ -63,6 +67,10 @@ export const StyledField = styled(Field)`
   border: 1px solid #ededed;
   height: 20px;
   padding: 5px;
+  &:hover,
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const Heading = styled(Column)`
