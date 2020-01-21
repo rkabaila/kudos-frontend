@@ -25,7 +25,7 @@ export const RowWrapper = styled(Row)`
   font-size: 12px;
   padding: 5px;
   color: gray;
-  &:nth-child(even) {
+  &:nth-of-type(even) {
     background-color: #ededed;
   }
 `;

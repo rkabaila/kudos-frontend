@@ -20,6 +20,7 @@ import { Form, Formik } from "formik";
 
 export interface User {
   id: string;
+  slackId: string;
   name: string;
   ownKudoses: Kudos[];
   writtenKudoses: Kudos[];
@@ -34,13 +35,14 @@ const GET_USERS = gql`
     users {
       id
       name
+      slackId
       ownKudoses {
         id
-        title
+        text
       }
       writtenKudoses {
         id
-        title
+        text
       }
     }
   }
@@ -50,7 +52,7 @@ const GET_USER_OWN_KUDOSES = gql`
   query {
     userOwnKudoses(userId: "ck41cz2v900o70795hidedvpy") {
       id
-      title
+      text
     }
   }
 `;
@@ -59,16 +61,17 @@ const GET_USER_WRITTEN_KUDOS = gql`
   query {
     userWrittenKudoses(userId: "ck41cz2v900o70795hidedvpy") {
       id
-      title
+      text
     }
   }
 `;
 
 const ADD_USER = gql`
-  mutation AddUser($name: String!) {
-    addUser(name: $name) {
+  mutation AddUser($name: String!, $slackId: String!) {
+    addUser(name: $name, slackId: $slackId) {
       id
       name
+      slackId
     }
   }
 `;
@@ -99,7 +102,8 @@ export const UsersList: React.FC = () => {
         <Row>
           <Column>
             <HeaderWrapper>
-              <CellWrapper> User id </CellWrapper>
+              <CellWrapper>User id</CellWrapper>
+              <CellWrapper>User slack id</CellWrapper>
               <CellWrapper>User name </CellWrapper>
               <CellWrapper>Own kudos</CellWrapper>
               <CellWrapper>Written kudos</CellWrapper>
@@ -108,16 +112,18 @@ export const UsersList: React.FC = () => {
             {data &&
               data.users &&
               data.users.map((user: User) => {
+                console.log(user);
                 const ownKudosText = user.ownKudoses
-                  .map(kudos => kudos.title)
+                  .map(kudos => kudos.text)
                   .join(", ");
                 const writtenKudosText = user.writtenKudoses
-                  .map(kudos => kudos.title)
+                  .map(kudos => kudos.text)
                   .join(", ");
 
                 return (
                   <RowWrapper key={user.id}>
                     <CellWrapper> {user.id} </CellWrapper>
+                    <CellWrapper> {user.slackId} </CellWrapper>
                     <CellWrapper>{user.name} </CellWrapper>
                     <CellWrapper>{ownKudosText}</CellWrapper>
                     <CellWrapper>{writtenKudosText}</CellWrapper>
@@ -129,12 +135,14 @@ export const UsersList: React.FC = () => {
           <FormSection>
             <FormWrapper>
               <Formik
-                initialValues={{ name: "" }}
+                initialValues={{ name: "", slackId: "" }}
                 validate={values => {
                   return {};
                 }}
                 onSubmit={values => {
-                  addUser({ variables: { name: values.name } });
+                  addUser({
+                    variables: { name: values.name, slackId: values.slackId }
+                  });
                 }}
               >
                 {() => (
@@ -142,6 +150,11 @@ export const UsersList: React.FC = () => {
                     <Column>
                       <Heading>Add user</Heading>
                       <StyledField type="text" name="name" placeholder="name" />
+                      <StyledField
+                        type="text"
+                        name="slackId"
+                        placeholder="slack id"
+                      />
                       <AddButton type="submit"> Add user</AddButton>
                     </Column>
                   </Form>
