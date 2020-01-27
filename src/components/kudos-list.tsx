@@ -51,6 +51,12 @@ const ADD_KUDOS = gql`
     addKudos(text: $text, authorId: $authorId, recipientId: $recipientId) {
       id
       text
+      author {
+        id
+      }
+      recipient {
+        id
+      }
     }
   }
 `;
@@ -65,8 +71,28 @@ const DELETE_KUDOS = gql`
 
 export const KudosList: React.FC = () => {
   const { loading, data } = useQuery<KudosData>(GET_KUDOSES);
-  const [addKudos] = useMutation(ADD_KUDOS);
-  const [deleteKudos] = useMutation(DELETE_KUDOS);
+  const [addKudos] = useMutation(ADD_KUDOS, {
+    update(cache, { data: { addKudos } }) {
+      const data: KudosData | null = cache.readQuery({ query: GET_KUDOSES });
+      const kudoses =
+        data && data.kudoses ? data.kudoses.concat(addKudos) : [addKudos];
+      cache.writeQuery({
+        query: GET_KUDOSES,
+        data: { kudoses }
+      });
+    }
+  });
+  const [deleteKudos] = useMutation(DELETE_KUDOS, {
+    update(cache, { data: { deleteKudos } }) {
+      const data: KudosData | null = cache.readQuery({ query: GET_KUDOSES });
+      const kudoses =
+        data && data.kudoses.filter(kudos => kudos.id !== deleteKudos.id);
+      cache.writeQuery({
+        query: GET_KUDOSES,
+        data: { kudoses }
+      });
+    }
+  });
 
   return (
     <Column>

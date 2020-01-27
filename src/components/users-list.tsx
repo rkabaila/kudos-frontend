@@ -72,6 +72,12 @@ const ADD_USER = gql`
       id
       name
       slackId
+      ownKudoses {
+        id
+      }
+      writtenKudoses {
+        id
+      }
     }
   }
 `;
@@ -86,12 +92,28 @@ const DELETE_USER = gql`
 
 export const UsersList: React.FC = () => {
   const { loading, data } = useQuery<UsersData>(GET_USERS);
-  const { data: ownKudosData } = useQuery(GET_USER_OWN_KUDOSES);
-  const { data: writtenKudosData } = useQuery(GET_USER_WRITTEN_KUDOS);
-  const [addUser] = useMutation(ADD_USER);
-  const [deleteUser] = useMutation(DELETE_USER);
-  console.log("ownKudosData", ownKudosData);
-  console.log("writtenKudosData", writtenKudosData);
+  const [addUser] = useMutation(ADD_USER, {
+    update(cache, { data: { addUser } }) {
+      const data: UsersData | null = cache.readQuery({ query: GET_USERS });
+      const users = data && data.users ? data.users.concat(addUser) : [addUser];
+      cache.writeQuery({
+        query: GET_USERS,
+        data: { users }
+      });
+    }
+  });
+
+  const [deleteUser] = useMutation(DELETE_USER, {
+    update(cache, { data: { deleteUser } }) {
+      const data: UsersData | null = cache.readQuery({ query: GET_USERS });
+      const users =
+        data && data.users.filter(user => user.id !== deleteUser.id);
+      cache.writeQuery({
+        query: GET_USERS,
+        data: { users }
+      });
+    }
+  });
 
   return (
     <Column>
@@ -112,7 +134,6 @@ export const UsersList: React.FC = () => {
             {data &&
               data.users &&
               data.users.map((user: User) => {
-                console.log(user);
                 const ownKudosText = user.ownKudoses
                   .map(kudos => kudos.text)
                   .join(", ");
