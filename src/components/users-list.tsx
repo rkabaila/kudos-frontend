@@ -121,37 +121,35 @@ export const UsersList: React.FC = () => {
       {loading ? (
         <p>Loading ...</p>
       ) : (
-        <Row>
-          <Column>
-            <HeaderWrapper>
-              <CellWrapper>User id</CellWrapper>
-              <CellWrapper>User slack id</CellWrapper>
-              <CellWrapper>User name </CellWrapper>
-              <CellWrapper>Own kudos</CellWrapper>
-              <CellWrapper>Written kudos</CellWrapper>
-            </HeaderWrapper>
+        <Column>
+          <HeaderWrapper>
+            <CellWrapper>User id</CellWrapper>
+            <CellWrapper>User slack id</CellWrapper>
+            <CellWrapper>User name </CellWrapper>
+            <CellWrapper>Own kudos</CellWrapper>
+            <CellWrapper>Written kudos</CellWrapper>
+          </HeaderWrapper>
 
-            {data &&
-              data.users &&
-              data.users.map((user: User) => {
-                const ownKudosText = user.ownKudoses
-                  .map(kudos => kudos.text)
-                  .join(", ");
-                const writtenKudosText = user.writtenKudoses
-                  .map(kudos => kudos.text)
-                  .join(", ");
+          {data &&
+            data.users &&
+            data.users.map((user: User) => {
+              const ownKudosText = user.ownKudoses
+                .map(kudos => kudos.text)
+                .join(", ");
+              const writtenKudosText = user.writtenKudoses
+                .map(kudos => kudos.text)
+                .join(", ");
 
-                return (
-                  <RowWrapper key={user.id}>
-                    <CellWrapper> {user.id} </CellWrapper>
-                    <CellWrapper> {user.slackId} </CellWrapper>
-                    <CellWrapper>{user.name} </CellWrapper>
-                    <CellWrapper>{ownKudosText}</CellWrapper>
-                    <CellWrapper>{writtenKudosText}</CellWrapper>
-                  </RowWrapper>
-                );
-              })}
-          </Column>
+              return (
+                <RowWrapper key={user.id}>
+                  <CellWrapper> {user.id} </CellWrapper>
+                  <CellWrapper> {user.slackId} </CellWrapper>
+                  <CellWrapper>{user.name} </CellWrapper>
+                  <CellWrapper>{ownKudosText}</CellWrapper>
+                  <CellWrapper>{writtenKudosText}</CellWrapper>
+                </RowWrapper>
+              );
+            })}
 
           <FormSection>
             <FormWrapper>
@@ -208,7 +206,7 @@ export const UsersList: React.FC = () => {
               </Formik>
             </FormWrapper>
           </FormSection>
-        </Row>
+        </Column>
       )}
     </Column>
   );

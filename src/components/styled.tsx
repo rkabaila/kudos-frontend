@@ -56,7 +56,7 @@ export const FormWrapper = styled(Column)`
 `;
 
 export const FormSection = styled(Row)`
-  margin-left: 20px;
+  margin: 50px auto;
   border-radius: 5px;
   border: 1px solid #ededed;
 `;
