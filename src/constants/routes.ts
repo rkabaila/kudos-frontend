@@ -1,4 +1,5 @@
 export const routes = {
   users: "/users",
-  kudoses: "/kudoses"
+  kudoses: "/kudoses",
+  login: "/login"
 };

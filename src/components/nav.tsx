@@ -20,5 +20,6 @@ export const Nav: React.FC = () => (
   <StyledNav>
     <StyledLink to={routes.users}>Users</StyledLink>
     <StyledLink to={routes.kudoses}>Kudoses</StyledLink>
+    <StyledLink to={routes.login}>Login</StyledLink>
   </StyledNav>
 );
