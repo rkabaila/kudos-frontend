@@ -3,7 +3,6 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { Kudos } from "./kudos-list";
 import {
-  Row,
   CellWrapper,
   AddButton,
   DeleteButton,
@@ -67,8 +66,8 @@ const GET_USER_WRITTEN_KUDOS = gql`
 `;
 
 const ADD_USER = gql`
-  mutation AddUser($name: String!, $slackId: String!) {
-    addUser(name: $name, slackId: $slackId) {
+  mutation AddUser($name: String!, $slackId: String!, $password: String!) {
+    addUser(name: $name, slackId: $slackId, password: $password) {
       id
       name
       slackId
@@ -154,13 +153,17 @@ export const UsersList: React.FC = () => {
           <FormSection>
             <FormWrapper>
               <Formik
-                initialValues={{ name: "", slackId: "" }}
+                initialValues={{ name: "", slackId: "", password: "" }}
                 validate={values => {
                   return {};
                 }}
                 onSubmit={values => {
                   addUser({
-                    variables: { name: values.name, slackId: values.slackId }
+                    variables: {
+                      name: values.name,
+                      slackId: values.slackId,
+                      password: values.password
+                    }
                   });
                 }}
               >
@@ -169,6 +172,11 @@ export const UsersList: React.FC = () => {
                     <Column>
                       <Heading>Add user</Heading>
                       <StyledField type="text" name="name" placeholder="name" />
+                      <StyledField
+                        type="text"
+                        name="password"
+                        placeholder="password"
+                      />
                       <StyledField
                         type="text"
                         name="slackId"
