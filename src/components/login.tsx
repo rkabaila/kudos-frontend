@@ -17,7 +17,11 @@ const LOGIN = gql`
 `;
 
 export const Login: React.FC = () => {
-  const [addUser] = useMutation(LOGIN);
+  const [login] = useMutation(LOGIN, {
+    onCompleted({ login }) {
+      localStorage.setItem("token", login.token);
+    }
+  });
   return (
     <Column>
       <FormWrapper>
@@ -27,7 +31,7 @@ export const Login: React.FC = () => {
             return {};
           }}
           onSubmit={values => {
-            addUser({
+            login({
               variables: {
                 name: values.name,
                 password: values.password
