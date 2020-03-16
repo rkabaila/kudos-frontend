@@ -1,11 +1,21 @@
 import * as React from "react";
 import { Global, css } from "@emotion/core";
-import { UsersList, KudosList, Nav, Login, PrivateRoute } from "./components";
+import {
+  UsersList,
+  KudosList,
+  Nav,
+  Login,
+  PrivateRoute,
+  GET_TOKEN
+} from "./components";
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Logout } from "./components/logout";
+import { useQuery } from "@apollo/react-hooks";
 
 export const App: React.FC = () => {
+  const { data } = useQuery(GET_TOKEN);
+  const isLoggedIn = data && data.token;
   return (
     <React.Fragment>
       <Global
@@ -17,9 +27,9 @@ export const App: React.FC = () => {
         `}
       />
       <BrowserRouter>
-        <Nav />
         <Route path={routes.login} component={Login} />
         <Route path={routes.logout} component={Logout} />
+        {isLoggedIn && <Nav />}
         <PrivateRoute>
           <Route path={routes.users} component={UsersList} />
         </PrivateRoute>

@@ -1,20 +1,14 @@
 import * as React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { routes } from "../constants";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
 
-interface WithAuthenticationProps {
-  children: JSX.Element;
-}
-
-export const WithAuthentication: React.FC<WithAuthenticationProps> = ({
-  children
-}) => {
-  if (localStorage.getItem("token")) {
-    return children;
+export const GET_TOKEN = gql`
+  query GetToken {
+    token @client
   }
-
-  return <Redirect to={routes.login} />;
-};
+`;
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -23,11 +17,14 @@ interface PrivateRouteProps {
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   children,
   ...rest
-}) => (
-  <Route
-    {...rest}
-    render={() =>
-      localStorage.getItem("token") ? children : <Redirect to={routes.login} />
-    }
-  />
-);
+}) => {
+  const { data } = useQuery(GET_TOKEN);
+  return (
+    <Route
+      {...rest}
+      render={() =>
+        data && data.token ? children : <Redirect to={routes.login} />
+      }
+    />
+  );
+};

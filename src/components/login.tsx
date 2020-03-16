@@ -2,11 +2,11 @@ import React from "react";
 import { Column, FormWrapper, StyledField, Heading, AddButton } from "./styled";
 import { Formik, Form } from "formik";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import { routes } from "../constants";
 
-const LOGIN = gql`
+export const LOGIN = gql`
   mutation Login($name: String!, $password: String!) {
     login(name: $name, password: $password) {
       token
@@ -20,9 +20,11 @@ const LOGIN = gql`
 
 export const Login: React.FC = () => {
   const history = useHistory();
+  const client = useApolloClient();
   const [login] = useMutation(LOGIN, {
     onCompleted({ login }) {
       localStorage.setItem("token", login.token);
+      client.writeData({ data: { token: login.token } });
       history.push(routes.kudoses);
     }
   });
