@@ -1,10 +1,11 @@
 import React from "react";
-import { Column, FormWrapper, StyledField, Heading, AddButton } from "./styled";
+import { Column, StyledField, Heading, AddButton } from "./styled";
 import { Formik, Form } from "formik";
 import gql from "graphql-tag";
 import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import { routes } from "../constants";
+import styled from "@emotion/styled";
 
 export const LOGIN = gql`
   mutation Login($name: String!, $password: String!) {
@@ -16,6 +17,17 @@ export const LOGIN = gql`
       }
     }
   }
+`;
+
+const FormWrapper = styled(Column)`
+  max-width: 350px;
+  margin: 30px auto;
+  height: 200px;
+  justify-content: space-between;
+`;
+
+const ButtonWrapper = styled(Column)`
+  align-self: flex-end;
 `;
 
 export const Login: React.FC = () => {
@@ -30,37 +42,33 @@ export const Login: React.FC = () => {
   });
   return (
     <Column>
-      <FormWrapper>
-        <Formik
-          initialValues={{ name: "", password: "" }}
-          validate={values => {
-            return {};
-          }}
-          onSubmit={values => {
-            login({
-              variables: {
-                name: values.name,
-                password: values.password
-              }
-            });
-          }}
-        >
-          {() => (
-            <Form>
-              <Column>
-                <Heading>Login</Heading>
-                <StyledField type="text" name="name" placeholder="name" />
-                <StyledField
-                  type="text"
-                  name="password"
-                  placeholder="password"
-                />
+      <Formik
+        initialValues={{ name: "", password: "" }}
+        validate={values => {
+          return {};
+        }}
+        onSubmit={values => {
+          login({
+            variables: {
+              name: values.name,
+              password: values.password
+            }
+          });
+        }}
+      >
+        {() => (
+          <Form>
+            <FormWrapper>
+              <Heading>Login</Heading>
+              <StyledField type="text" name="name" placeholder="name" />
+              <StyledField type="text" name="password" placeholder="password" />
+              <ButtonWrapper>
                 <AddButton type="submit"> Login</AddButton>
-              </Column>
-            </Form>
-          )}
-        </Formik>
-      </FormWrapper>
+              </ButtonWrapper>
+            </FormWrapper>
+          </Form>
+        )}
+      </Formik>
     </Column>
   );
 };

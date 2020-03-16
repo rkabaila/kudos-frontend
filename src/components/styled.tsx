@@ -76,6 +76,7 @@ export const StyledField = styled(Field)`
 export const Heading = styled(Column)`
   font-size: 18px;
   color: gray;
+  text-align: center;
 `;
 
 export const PageHeading = styled(Heading)`
