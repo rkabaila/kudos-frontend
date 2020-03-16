@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Global, css } from "@emotion/core";
-import { UsersList, KudosList, Nav, Login } from "./components";
+import { UsersList, KudosList, Nav, Login, PrivateRoute } from "./components";
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
+import { Logout } from "./components/logout";
 
 export const App: React.FC = () => {
   return (
@@ -17,9 +18,14 @@ export const App: React.FC = () => {
       />
       <BrowserRouter>
         <Nav />
-        <Route path={routes.users} component={UsersList} />
-        <Route path={routes.kudoses} component={KudosList} />
         <Route path={routes.login} component={Login} />
+        <Route path={routes.logout} component={Logout} />
+        <PrivateRoute>
+          <Route path={routes.users} component={UsersList} />
+        </PrivateRoute>
+        <PrivateRoute>
+          <Route path={routes.kudoses} component={KudosList} />
+        </PrivateRoute>
       </BrowserRouter>
     </React.Fragment>
   );

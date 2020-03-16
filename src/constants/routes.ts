@@ -1,5 +1,6 @@
 export const routes = {
   users: "/users",
   kudoses: "/kudoses",
-  login: "/login"
+  login: "/login",
+  logout: "/logout"
 };

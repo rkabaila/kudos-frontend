@@ -3,3 +3,4 @@ export * from "./kudos-list";
 export * from "./styled";
 export * from "./nav";
 export * from "./login";
+export * from "./private-route";
