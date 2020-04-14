@@ -38,21 +38,22 @@ export const Login: React.FC = () => {
       localStorage.setItem("token", login.token);
       client.writeData({ data: { token: login.token } });
       history.push(routes.kudoses);
-    }
+    },
+    onError(error) {},
   });
   return (
     <Column>
       <Formik
         initialValues={{ name: "", password: "" }}
-        validate={values => {
+        validate={(values) => {
           return {};
         }}
-        onSubmit={values => {
+        onSubmit={(values) => {
           login({
             variables: {
               name: values.name,
-              password: values.password
-            }
+              password: values.password,
+            },
           });
         }}
       >
