@@ -4,3 +4,4 @@ export * from "./styled";
 export * from "./nav";
 export * from "./login";
 export * from "./private-route";
+export * from "./require-role";

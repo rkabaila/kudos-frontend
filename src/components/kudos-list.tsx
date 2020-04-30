@@ -14,8 +14,9 @@ import {
   FormSection,
   StyledField,
   Heading,
-  PageHeading
+  PageHeading,
 } from "./styled";
+import { RequireRole } from "./require-role";
 
 export interface Kudos {
   id: string;
@@ -77,115 +78,121 @@ export const KudosList: React.FC = () => {
         data && data.kudoses ? data.kudoses.concat(addKudos) : [addKudos];
       cache.writeQuery({
         query: GET_KUDOSES,
-        data: { kudoses }
+        data: { kudoses },
       });
-    }
+    },
   });
   const [deleteKudos] = useMutation(DELETE_KUDOS, {
     update(cache, { data: { deleteKudos } }) {
       const data: KudosData | null = cache.readQuery({ query: GET_KUDOSES });
       const kudoses =
-        data && data.kudoses.filter(kudos => kudos.id !== deleteKudos.id);
+        data && data.kudoses.filter((kudos) => kudos.id !== deleteKudos.id);
       cache.writeQuery({
         query: GET_KUDOSES,
-        data: { kudoses }
+        data: { kudoses },
       });
-    }
+    },
   });
 
   return (
-    <Column>
-      <PageHeading>Kudos</PageHeading>
-      {loading ? (
-        <p>Loading ...</p>
-      ) : (
-        <Column>
-          <HeaderWrapper>
-            <CellWrapper>Kudos id</CellWrapper>
-            <CellWrapper>Kudos text</CellWrapper>
-            <CellWrapper>Author</CellWrapper>
-            <CellWrapper> Recipient</CellWrapper>
-          </HeaderWrapper>
+    <RequireRole role="admin">
+      <Column>
+        <PageHeading>Kudoses</PageHeading>
+        {loading ? (
+          <p>Loading ...</p>
+        ) : (
+          <Column>
+            <HeaderWrapper>
+              <CellWrapper>Kudos id</CellWrapper>
+              <CellWrapper>Kudos text</CellWrapper>
+              <CellWrapper>Author</CellWrapper>
+              <CellWrapper> Recipient</CellWrapper>
+            </HeaderWrapper>
 
-          {data &&
-            data.kudoses &&
-            data.kudoses.map((kudos: Kudos) => (
-              <RowWrapper key={kudos.id}>
-                <CellWrapper>{kudos.id} </CellWrapper>
-                <CellWrapper>{kudos.text}</CellWrapper>
-                <CellWrapper>{kudos.author && kudos.author.name}</CellWrapper>
-                <CellWrapper>
-                  {kudos.recipient && kudos.recipient.name}
-                </CellWrapper>
-              </RowWrapper>
-            ))}
+            {data &&
+              data.kudoses &&
+              data.kudoses.map((kudos: Kudos) => (
+                <RowWrapper key={kudos.id}>
+                  <CellWrapper>{kudos.id} </CellWrapper>
+                  <CellWrapper>{kudos.text}</CellWrapper>
+                  <CellWrapper>{kudos.author && kudos.author.name}</CellWrapper>
+                  <CellWrapper>
+                    {kudos.recipient && kudos.recipient.name}
+                  </CellWrapper>
+                </RowWrapper>
+              ))}
 
-          <FormSection>
-            <FormWrapper>
-              <Formik
-                initialValues={{ text: "", authorId: "", recipientId: "" }}
-                validate={values => {
-                  return {};
-                }}
-                onSubmit={values => {
-                  addKudos({
-                    variables: {
-                      text: values.text,
-                      authorId: values.authorId,
-                      recipientId: values.recipientId
-                    }
-                  });
-                }}
-              >
-                {() => (
-                  <Form>
-                    <Column>
-                      <Heading>Add kudos</Heading>
-                      <StyledField type="text" name="text" placeholder="text" />
-                      <StyledField
-                        type="text"
-                        name="authorId"
-                        placeholder="authorId"
-                      />
-                      <StyledField
-                        type="text"
-                        name="recipientId"
-                        placeholder="recipientId"
-                      />
-                      <AddButton type="submit"> Add kudos</AddButton>
-                    </Column>
-                  </Form>
-                )}
-              </Formik>
-            </FormWrapper>
-            <FormWrapper>
-              <Formik
-                initialValues={{ kudosId: "" }}
-                validate={values => {
-                  return {};
-                }}
-                onSubmit={values => {
-                  deleteKudos({ variables: { id: values.kudosId } });
-                }}
-              >
-                {() => (
-                  <Form>
-                    <Heading>Delete kudos</Heading>
-                    <Column>
-                      <StyledField
-                        type="text"
-                        name="kudosId"
-                        placeholder="kudosId"
-                      />
-                      <DeleteButton type="submit">Delete kudos</DeleteButton>
-                    </Column>
-                  </Form>
-                )}
-              </Formik>
-            </FormWrapper>
-          </FormSection>
-        </Column>
-      )}
-    </Column>
+            <FormSection>
+              <FormWrapper>
+                <Formik
+                  initialValues={{ text: "", authorId: "", recipientId: "" }}
+                  validate={(values) => {
+                    return {};
+                  }}
+                  onSubmit={(values) => {
+                    addKudos({
+                      variables: {
+                        text: values.text,
+                        authorId: values.authorId,
+                        recipientId: values.recipientId,
+                      },
+                    });
+                  }}
+                >
+                  {() => (
+                    <Form>
+                      <Column>
+                        <Heading>Add kudos</Heading>
+                        <StyledField
+                          type="text"
+                          name="text"
+                          placeholder="text"
+                        />
+                        <StyledField
+                          type="text"
+                          name="authorId"
+                          placeholder="authorId"
+                        />
+                        <StyledField
+                          type="text"
+                          name="recipientId"
+                          placeholder="recipientId"
+                        />
+                        <AddButton type="submit"> Add kudos</AddButton>
+                      </Column>
+                    </Form>
+                  )}
+                </Formik>
+              </FormWrapper>
+              <FormWrapper>
+                <Formik
+                  initialValues={{ kudosId: "" }}
+                  validate={(values) => {
+                    return {};
+                  }}
+                  onSubmit={(values) => {
+                    deleteKudos({ variables: { id: values.kudosId } });
+                  }}
+                >
+                  {() => (
+                    <Form>
+                      <Heading>Delete kudos</Heading>
+                      <Column>
+                        <StyledField
+                          type="text"
+                          name="kudosId"
+                          placeholder="kudosId"
+                        />
+                        <DeleteButton type="submit">Delete kudos</DeleteButton>
+                      </Column>
+                    </Form>
+                  )}
+                </Formik>
+              </FormWrapper>
+            </FormSection>
+          </Column>
+        )}
+      </Column>
+    </RequireRole>
   );
 };
