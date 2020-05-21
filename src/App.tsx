@@ -6,7 +6,7 @@ import {
   Nav,
   Login,
   PrivateRoute,
-  GET_TOKEN
+  GET_TOKEN,
 } from "./components";
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -15,7 +15,7 @@ import { useQuery } from "@apollo/react-hooks";
 
 export const App: React.FC = () => {
   const { data } = useQuery(GET_TOKEN);
-  const isLoggedIn = data && data.token;
+  const isLoggedIn = data?.token;
   return (
     <React.Fragment>
       <Global

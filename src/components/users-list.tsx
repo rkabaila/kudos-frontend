@@ -50,24 +50,6 @@ const GET_USERS = gql`
   }
 `;
 
-const GET_USER_OWN_KUDOSES = gql`
-  query {
-    userOwnKudoses(userId: "ck41cz2v900o70795hidedvpy") {
-      id
-      text
-    }
-  }
-`;
-
-const GET_USER_WRITTEN_KUDOS = gql`
-  query {
-    userWrittenKudoses(userId: "ck41cz2v900o70795hidedvpy") {
-      id
-      text
-    }
-  }
-`;
-
 const ADD_USER = gql`
   mutation AddUser(
     $name: String!
@@ -103,7 +85,7 @@ export const UsersList: React.FC = () => {
   const [addUser] = useMutation(ADD_USER, {
     update(cache, { data: { addUser } }) {
       const data: UsersData | null = cache.readQuery({ query: GET_USERS });
-      const users = data && data.users ? data.users.concat(addUser) : [addUser];
+      const users = data?.users ? data.users.concat(addUser) : [addUser];
       cache.writeQuery({
         query: GET_USERS,
         data: { users },
@@ -114,8 +96,7 @@ export const UsersList: React.FC = () => {
   const [deleteUser] = useMutation(DELETE_USER, {
     update(cache, { data: { deleteUser } }) {
       const data: UsersData | null = cache.readQuery({ query: GET_USERS });
-      const users =
-        data && data.users.filter((user) => user.id !== deleteUser.id);
+      const users = data?.users.filter((user) => user.id !== deleteUser.id);
       cache.writeQuery({
         query: GET_USERS,
         data: { users },
@@ -140,27 +121,25 @@ export const UsersList: React.FC = () => {
               <CellWrapper>Written kudos</CellWrapper>
             </HeaderWrapper>
 
-            {data &&
-              data.users &&
-              data.users.map((user: User) => {
-                const ownKudosText = user.ownKudoses
-                  .map((kudos) => kudos.text)
-                  .join(", ");
-                const writtenKudosText = user.writtenKudoses
-                  .map((kudos) => kudos.text)
-                  .join(", ");
+            {data?.users.map((user: User) => {
+              const ownKudosText = user.ownKudoses
+                .map((kudos) => kudos.text)
+                .join(", ");
+              const writtenKudosText = user.writtenKudoses
+                .map((kudos) => kudos.text)
+                .join(", ");
 
-                return (
-                  <RowWrapper key={user.id}>
-                    <CellWrapper>{user.id}</CellWrapper>
-                    <CellWrapper>{user.slackId}</CellWrapper>
-                    <CellWrapper>{user.name}</CellWrapper>
-                    <CellWrapper>{user.role}</CellWrapper>
-                    <CellWrapper>{ownKudosText}</CellWrapper>
-                    <CellWrapper>{writtenKudosText}</CellWrapper>
-                  </RowWrapper>
-                );
-              })}
+              return (
+                <RowWrapper key={user.id}>
+                  <CellWrapper>{user.id}</CellWrapper>
+                  <CellWrapper>{user.slackId}</CellWrapper>
+                  <CellWrapper>{user.name}</CellWrapper>
+                  <CellWrapper>{user.role}</CellWrapper>
+                  <CellWrapper>{ownKudosText}</CellWrapper>
+                  <CellWrapper>{writtenKudosText}</CellWrapper>
+                </RowWrapper>
+              );
+            })}
 
             <FormSection>
               <FormWrapper>

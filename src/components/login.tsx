@@ -62,7 +62,11 @@ export const Login: React.FC = () => {
             <FormWrapper>
               <Heading>Login</Heading>
               <StyledField type="text" name="name" placeholder="name" />
-              <StyledField type="text" name="password" placeholder="password" />
+              <StyledField
+                type="password"
+                name="password"
+                placeholder="password"
+              />
               <ButtonWrapper>
                 <AddButton type="submit"> Login</AddButton>
               </ButtonWrapper>

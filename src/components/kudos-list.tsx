@@ -74,8 +74,9 @@ export const KudosList: React.FC = () => {
   const [addKudos] = useMutation(ADD_KUDOS, {
     update(cache, { data: { addKudos } }) {
       const data: KudosData | null = cache.readQuery({ query: GET_KUDOSES });
-      const kudoses =
-        data && data.kudoses ? data.kudoses.concat(addKudos) : [addKudos];
+      const kudoses = data?.kudoses
+        ? data.kudoses.concat(addKudos)
+        : [addKudos];
       cache.writeQuery({
         query: GET_KUDOSES,
         data: { kudoses },
@@ -85,8 +86,9 @@ export const KudosList: React.FC = () => {
   const [deleteKudos] = useMutation(DELETE_KUDOS, {
     update(cache, { data: { deleteKudos } }) {
       const data: KudosData | null = cache.readQuery({ query: GET_KUDOSES });
-      const kudoses =
-        data && data.kudoses.filter((kudos) => kudos.id !== deleteKudos.id);
+      const kudoses = data?.kudoses.filter(
+        (kudos) => kudos.id !== deleteKudos.id
+      );
       cache.writeQuery({
         query: GET_KUDOSES,
         data: { kudoses },
@@ -109,18 +111,14 @@ export const KudosList: React.FC = () => {
               <CellWrapper> Recipient</CellWrapper>
             </HeaderWrapper>
 
-            {data &&
-              data.kudoses &&
-              data.kudoses.map((kudos: Kudos) => (
-                <RowWrapper key={kudos.id}>
-                  <CellWrapper>{kudos.id} </CellWrapper>
-                  <CellWrapper>{kudos.text}</CellWrapper>
-                  <CellWrapper>{kudos.author && kudos.author.name}</CellWrapper>
-                  <CellWrapper>
-                    {kudos.recipient && kudos.recipient.name}
-                  </CellWrapper>
-                </RowWrapper>
-              ))}
+            {data?.kudoses.map((kudos: Kudos) => (
+              <RowWrapper key={kudos.id}>
+                <CellWrapper>{kudos.id} </CellWrapper>
+                <CellWrapper>{kudos.text}</CellWrapper>
+                <CellWrapper>{kudos.author.name}</CellWrapper>
+                <CellWrapper>{kudos.recipient.name}</CellWrapper>
+              </RowWrapper>
+            ))}
 
             <FormSection>
               <FormWrapper>

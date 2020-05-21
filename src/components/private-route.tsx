@@ -22,9 +22,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   return (
     <Route
       {...rest}
-      render={() =>
-        data && data.token ? children : <Redirect to={routes.login} />
-      }
+      render={() => (data?.token ? children : <Redirect to={routes.login} />)}
     />
   );
 };
