@@ -30,6 +30,8 @@ const ButtonWrapper = styled(Column)`
   align-self: flex-end;
 `;
 
+//TODO move logic to utils, separate layer
+
 export const Login: React.FC = () => {
   const history = useHistory();
   const client = useApolloClient();

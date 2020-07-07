@@ -9,6 +9,7 @@ export const GET_TOKEN = gql`
     token @client
   }
 `;
+//TODO in config put data from starage to cache on reload
 
 interface PrivateRouteProps {
   children: JSX.Element;

@@ -3,6 +3,7 @@ import { GET_TOKEN } from "./private-route";
 import { useQuery } from "@apollo/react-hooks";
 import * as jwt from "jsonwebtoken";
 
+//TODO do not save secret on FE
 const jwtSecret = process.env.REACT_APP_JWT_SECRET || "";
 
 interface RequireRoleProps {

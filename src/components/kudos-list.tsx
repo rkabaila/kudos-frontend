@@ -28,7 +28,10 @@ export interface Kudos {
 interface KudosData {
   kudoses: Kudos[];
 }
-
+//TODO create fragments
+//api.get.kudoses
+//use prisma generators for queries
+// prisma client
 const GET_KUDOSES = gql`
   query {
     kudoses {
@@ -95,7 +98,7 @@ export const KudosList: React.FC = () => {
       });
     },
   });
-
+  //TODO reusable table , pass config header cell row , move functions out of form
   return (
     <RequireRole role="admin">
       <Column>
