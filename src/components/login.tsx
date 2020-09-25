@@ -1,11 +1,14 @@
 import React from "react";
-import { Column, StyledField, Heading, AddButton } from "./styled";
+import { Column, StyledField, Heading, AddButton, Row } from "./styled";
 import { Formik, Form } from "formik";
 import gql from "graphql-tag";
 import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import { routes } from "../constants";
 import styled from "@emotion/styled";
+import { GoogleLogin } from "react-google-login";
+
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
 export const LOGIN = gql`
   mutation Login($name: String!, $password: String!) {
@@ -30,6 +33,16 @@ const ButtonWrapper = styled(Column)`
   align-self: flex-end;
 `;
 
+const GoogleWrapper = styled(Column)`
+  width: 200px;
+  margin-left: 30px;
+`;
+
+const PageWrapper = styled(Row)`
+  justify-content: center;
+  align-items: center;
+`;
+
 //TODO move logic to utils, separate layer
 
 export const Login: React.FC = () => {
@@ -44,17 +57,18 @@ export const Login: React.FC = () => {
     onError(error) {},
   });
   return (
-    <Column>
+    <PageWrapper>
       <Formik
         initialValues={{ name: "", password: "" }}
         validate={(values) => {
           return {};
         }}
         onSubmit={(values) => {
+          const { name, password } = values;
           login({
             variables: {
-              name: values.name,
-              password: values.password,
+              name,
+              password,
             },
           });
         }}
@@ -76,6 +90,22 @@ export const Login: React.FC = () => {
           </Form>
         )}
       </Formik>
-    </Column>
+      <GoogleWrapper>
+        <GoogleLogin
+          clientId={clientId}
+          buttonText="Login"
+          onSuccess={(response) => {
+            console.log(response);
+            localStorage.setItem("accessToken", response.accessToken);
+            client.writeData({ data: { accessToken: response.accessToken } });
+            history.push(routes.home);
+          }}
+          onFailure={(a) => {
+            console.log(a);
+          }}
+          cookiePolicy={"single_host_origin"}
+        />
+      </GoogleWrapper>
+    </PageWrapper>
   );
 };

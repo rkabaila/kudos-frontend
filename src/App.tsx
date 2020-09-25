@@ -7,6 +7,7 @@ import {
   Login,
   PrivateRoute,
   GET_TOKEN,
+  Home,
 } from "./components";
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -30,6 +31,9 @@ export const App: React.FC = () => {
         <Route path={routes.login} component={Login} />
         <Route path={routes.logout} component={Logout} />
         {isLoggedIn && <Nav />}
+        {/* <PrivateRoute> */}
+        <Route path={routes.home} component={Home} />
+        {/* </PrivateRoute> */}
         <PrivateRoute>
           <Route path={routes.users} component={UsersList} />
         </PrivateRoute>
