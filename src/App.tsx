@@ -12,9 +12,13 @@ import {
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Logout } from "./components/logout";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useApolloClient } from "@apollo/react-hooks";
 
 export const App: React.FC = () => {
+  const client = useApolloClient();
+  React.useMemo(() => {
+    client.writeData({ data: { token: localStorage.getItem("token") } });
+  }, [client]);
   const { data } = useQuery(GET_TOKEN);
   const isLoggedIn = data?.token;
   return (
