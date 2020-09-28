@@ -22,6 +22,18 @@ export const LOGIN = gql`
   }
 `;
 
+export const GOOGLE_LOGIN = gql`
+  mutation GoogleLogin($token: String!) {
+    googleLogin(token: $token) {
+      token
+      user {
+        id
+        name
+      }
+    }
+  }
+`;
+
 const FormWrapper = styled(Column)`
   max-width: 350px;
   margin: 30px auto;
@@ -49,6 +61,14 @@ export const Login: React.FC = () => {
   const history = useHistory();
   const client = useApolloClient();
   const [login] = useMutation(LOGIN, {
+    onCompleted({ login }) {
+      localStorage.setItem("token", login.token);
+      client.writeData({ data: { token: login.token } });
+      history.push(routes.kudoses);
+    },
+    onError(error) {},
+  });
+  const [googleLogin] = useMutation(GOOGLE_LOGIN, {
     onCompleted({ login }) {
       localStorage.setItem("token", login.token);
       client.writeData({ data: { token: login.token } });
@@ -94,14 +114,17 @@ export const Login: React.FC = () => {
         <GoogleLogin
           clientId={clientId}
           buttonText="Login"
-          onSuccess={(response) => {
-            console.log(response);
-            localStorage.setItem("accessToken", response.accessToken);
-            client.writeData({ data: { accessToken: response.accessToken } });
+          onSuccess={(googleUser) => {
+            const token = (googleUser as any).getAuthResponse().id_token;
+            googleLogin({
+              variables: {
+                token,
+              },
+            });
             history.push(routes.home);
           }}
-          onFailure={(a) => {
-            console.log(a);
+          onFailure={(error) => {
+            console.log(error);
           }}
           cookiePolicy={"single_host_origin"}
         />

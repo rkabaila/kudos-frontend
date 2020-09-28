@@ -22,6 +22,7 @@ export interface User {
   id: string;
   slackId: string;
   name: string;
+  email: string;
   role: string;
   ownKudoses: Kudos[];
   writtenKudoses: Kudos[];
@@ -36,6 +37,7 @@ const GET_USERS = gql`
     users {
       id
       name
+      email
       role
       slackId
       ownKudoses {
@@ -54,12 +56,20 @@ const ADD_USER = gql`
   mutation AddUser(
     $name: String!
     $slackId: String!
+    $email: String!
     $password: String!
     $role: String!
   ) {
-    addUser(name: $name, slackId: $slackId, password: $password, role: $role) {
+    addUser(
+      name: $name
+      slackId: $slackId
+      email: $email
+      password: $password
+      role: $role
+    ) {
       id
       name
+      email
       slackId
       role
       ownKudoses {
@@ -116,6 +126,7 @@ export const UsersList: React.FC = () => {
               <CellWrapper>User id</CellWrapper>
               <CellWrapper>User slack id</CellWrapper>
               <CellWrapper>User name</CellWrapper>
+              <CellWrapper>Email</CellWrapper>
               <CellWrapper>Role</CellWrapper>
               <CellWrapper>Own kudos</CellWrapper>
               <CellWrapper>Written kudos</CellWrapper>
@@ -134,6 +145,7 @@ export const UsersList: React.FC = () => {
                   <CellWrapper>{user.id}</CellWrapper>
                   <CellWrapper>{user.slackId}</CellWrapper>
                   <CellWrapper>{user.name}</CellWrapper>
+                  <CellWrapper>{user.email}</CellWrapper>
                   <CellWrapper>{user.role}</CellWrapper>
                   <CellWrapper>{ownKudosText}</CellWrapper>
                   <CellWrapper>{writtenKudosText}</CellWrapper>
@@ -146,6 +158,7 @@ export const UsersList: React.FC = () => {
                 <Formik
                   initialValues={{
                     name: "",
+                    email: "",
                     slackId: "",
                     password: "",
                     role: "user",
@@ -157,6 +170,7 @@ export const UsersList: React.FC = () => {
                     addUser({
                       variables: {
                         name: values.name,
+                        email: values.email,
                         slackId: values.slackId,
                         role: values.role,
                         password: values.password,
@@ -172,6 +186,11 @@ export const UsersList: React.FC = () => {
                           type="text"
                           name="name"
                           placeholder="name"
+                        />
+                        <StyledField
+                          type="text"
+                          name="email"
+                          placeholder="email"
                         />
                         <StyledField
                           type="text"
