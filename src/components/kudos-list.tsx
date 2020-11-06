@@ -25,7 +25,7 @@ export interface Kudos {
   recipient: User;
 }
 
-interface KudosData {
+export interface KudosData {
   kudoses: Kudos[];
 }
 //TODO create fragments
@@ -118,8 +118,8 @@ export const KudosList: React.FC = () => {
               <RowWrapper key={kudos.id}>
                 <CellWrapper>{kudos.id} </CellWrapper>
                 <CellWrapper>{kudos.text}</CellWrapper>
-                <CellWrapper>{kudos.author.name}</CellWrapper>
-                <CellWrapper>{kudos.recipient.name}</CellWrapper>
+                <CellWrapper>{kudos.author?.name}</CellWrapper>
+                <CellWrapper>{kudos.recipient?.name}</CellWrapper>
               </RowWrapper>
             ))}
 

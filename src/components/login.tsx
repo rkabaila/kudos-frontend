@@ -69,10 +69,9 @@ export const Login: React.FC = () => {
     onError(error) {},
   });
   const [googleLogin] = useMutation(GOOGLE_LOGIN, {
-    onCompleted({ login }) {
-      localStorage.setItem("token", login.token);
-      client.writeData({ data: { token: login.token } });
-      history.push(routes.kudoses);
+    onCompleted({ googleLogin }) {
+      localStorage.setItem("token", googleLogin.token);
+      history.push(routes.home);
     },
     onError(error) {},
   });
@@ -104,7 +103,7 @@ export const Login: React.FC = () => {
                 placeholder="password"
               />
               <ButtonWrapper>
-                <AddButton type="submit"> Login</AddButton>
+                <AddButton type="submit">Login</AddButton>
               </ButtonWrapper>
             </FormWrapper>
           </Form>
@@ -115,13 +114,13 @@ export const Login: React.FC = () => {
           clientId={clientId}
           buttonText="Login"
           onSuccess={(googleUser) => {
+            console.log(googleUser);
             const token = (googleUser as any).getAuthResponse().id_token;
             googleLogin({
               variables: {
                 token,
               },
             });
-            history.push(routes.home);
           }}
           onFailure={(error) => {
             console.log(error);
