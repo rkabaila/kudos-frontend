@@ -62,6 +62,10 @@ export const Login: React.FC = () => {
   const client = useApolloClient();
   const [login] = useMutation(LOGIN, {
     onCompleted({ login }) {
+      if (!login.user) {
+        console.log("Wrong username or password.");
+        return;
+      }
       localStorage.setItem("token", login.token);
       client.writeData({ data: { token: login.token } });
       history.push(routes.kudoses);
