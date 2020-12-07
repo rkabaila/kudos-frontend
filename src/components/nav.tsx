@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Row } from "./styled";
 import { Link } from "react-router-dom";
 import { routes } from "../constants";
+import { RequireRole } from "./require-role";
 
 const StyledNav = styled(Row)`
   justify-content: flex-end;
@@ -18,8 +19,12 @@ const StyledLink = styled(Link)`
 
 export const Nav: React.FC = () => (
   <StyledNav>
-    <StyledLink to={routes.users}>Users</StyledLink>
-    <StyledLink to={routes.kudoses}>Kudoses</StyledLink>
+    <RequireRole role="admin">
+      <StyledLink to={routes.users}>Users</StyledLink>
+    </RequireRole>
+    <RequireRole role="admin">
+      <StyledLink to={routes.kudoses}>Kudoses</StyledLink>
+    </RequireRole>
     <StyledLink to={routes.logout}>Logout</StyledLink>
   </StyledNav>
 );

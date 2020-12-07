@@ -116,9 +116,9 @@ export const Login: React.FC = () => {
       <GoogleWrapper>
         <GoogleLogin
           clientId={clientId}
+          hostedDomain="telesoftas.com"
           buttonText="Login"
           onSuccess={(googleUser) => {
-            console.log(googleUser);
             const token = (googleUser as any).getAuthResponse().id_token;
             googleLogin({
               variables: {
