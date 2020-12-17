@@ -3,5 +3,6 @@ export const routes = {
   kudoses: "/kudoses",
   home: "/home",
   login: "/login",
+  adminLogin: "/admin_login",
   logout: "/logout",
 };

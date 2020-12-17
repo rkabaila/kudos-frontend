@@ -3,24 +3,22 @@ import { Global, css } from "@emotion/core";
 import {
   UsersList,
   KudosList,
-  Nav,
   Login,
-  PrivateRoute,
-  GET_TOKEN,
   Home,
+  AdminLogin,
+  WithAuthentication,
 } from "./components";
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Logout } from "./components/logout";
-import { useQuery, useApolloClient } from "@apollo/react-hooks";
+import { useApolloClient } from "@apollo/react-hooks";
 
 export const App: React.FC = () => {
   const client = useApolloClient();
   React.useMemo(() => {
     client.writeData({ data: { token: localStorage.getItem("token") } });
   }, [client]);
-  const { data } = useQuery(GET_TOKEN);
-  const isLoggedIn = data?.token;
+
   return (
     <React.Fragment>
       <Global
@@ -32,18 +30,35 @@ export const App: React.FC = () => {
         `}
       />
       <BrowserRouter>
-        <Route path={routes.login} component={Login} />
+        <Route path={routes.login} component={Login} exact />
+        <Route path={routes.adminLogin} component={AdminLogin} exact />
         <Route path={routes.logout} component={Logout} />
-        {isLoggedIn && <Nav />}
-        <PrivateRoute>
-          <Route path={routes.home} component={Home} />
-        </PrivateRoute>
-        <PrivateRoute>
-          <Route path={routes.users} component={UsersList} />
-        </PrivateRoute>
-        <PrivateRoute>
-          <Route path={routes.kudoses} component={KudosList} />
-        </PrivateRoute>
+        <Route
+          path={routes.home}
+          render={() => (
+            <WithAuthentication>
+              <Home />
+            </WithAuthentication>
+          )}
+        />
+        <Route
+          path={routes.users}
+          render={() => (
+            <WithAuthentication>
+              <UsersList />
+            </WithAuthentication>
+          )}
+          secret
+        />
+        <Route
+          path={routes.kudoses}
+          render={() => (
+            <WithAuthentication>
+              <KudosList />
+            </WithAuthentication>
+          )}
+          secret
+        />
       </BrowserRouter>
     </React.Fragment>
   );

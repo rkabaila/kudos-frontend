@@ -17,6 +17,7 @@ import {
 } from "./styled";
 import { Form, Formik } from "formik";
 import { RequireRole } from "./require-role";
+import { Nav } from "./nav";
 
 export interface User {
   id: string;
@@ -116,131 +117,134 @@ export const UsersList: React.FC = () => {
 
   return (
     <RequireRole role="admin">
-      <Column>
-        <PageHeading>Users</PageHeading>
-        {loading ? (
-          <p>Loading ...</p>
-        ) : (
-          <Column>
-            <HeaderWrapper>
-              <CellWrapper>User id</CellWrapper>
-              <CellWrapper>User slack id</CellWrapper>
-              <CellWrapper>User name</CellWrapper>
-              <CellWrapper>Email</CellWrapper>
-              <CellWrapper>Role</CellWrapper>
-              <CellWrapper>Own kudos</CellWrapper>
-              <CellWrapper>Written kudos</CellWrapper>
-            </HeaderWrapper>
+      <>
+        <Nav />
+        <Column>
+          <PageHeading>Users</PageHeading>
+          {loading ? (
+            <p>Loading ...</p>
+          ) : (
+            <Column>
+              <HeaderWrapper>
+                <CellWrapper>User id</CellWrapper>
+                <CellWrapper>User slack id</CellWrapper>
+                <CellWrapper>User name</CellWrapper>
+                <CellWrapper>Email</CellWrapper>
+                <CellWrapper>Role</CellWrapper>
+                <CellWrapper>Own kudos</CellWrapper>
+                <CellWrapper>Written kudos</CellWrapper>
+              </HeaderWrapper>
 
-            {data?.users.map((user: User) => {
-              const ownKudosText = user.ownKudoses
-                .map((kudos) => kudos.text)
-                .join(", ");
-              const writtenKudosText = user.writtenKudoses
-                .map((kudos) => kudos.text)
-                .join(", ");
+              {data?.users.map((user: User) => {
+                const ownKudosText = user.ownKudoses
+                  .map((kudos) => kudos.text)
+                  .join(", ");
+                const writtenKudosText = user.writtenKudoses
+                  .map((kudos) => kudos.text)
+                  .join(", ");
 
-              return (
-                <RowWrapper key={user.id}>
-                  <CellWrapper>{user.id}</CellWrapper>
-                  <CellWrapper>{user.slackId}</CellWrapper>
-                  <CellWrapper>{user.name}</CellWrapper>
-                  <CellWrapper>{user.email}</CellWrapper>
-                  <CellWrapper>{user.role}</CellWrapper>
-                  <CellWrapper>{ownKudosText}</CellWrapper>
-                  <CellWrapper>{writtenKudosText}</CellWrapper>
-                </RowWrapper>
-              );
-            })}
+                return (
+                  <RowWrapper key={user.id}>
+                    <CellWrapper>{user.id}</CellWrapper>
+                    <CellWrapper>{user.slackId}</CellWrapper>
+                    <CellWrapper>{user.name}</CellWrapper>
+                    <CellWrapper>{user.email}</CellWrapper>
+                    <CellWrapper>{user.role}</CellWrapper>
+                    <CellWrapper>{ownKudosText}</CellWrapper>
+                    <CellWrapper>{writtenKudosText}</CellWrapper>
+                  </RowWrapper>
+                );
+              })}
 
-            <FormSection>
-              <FormWrapper>
-                <Formik
-                  initialValues={{
-                    name: "",
-                    email: "",
-                    slackId: "",
-                    password: "",
-                    role: "user",
-                  }}
-                  validate={(values) => {
-                    return {};
-                  }}
-                  onSubmit={(values) => {
-                    addUser({
-                      variables: {
-                        name: values.name,
-                        email: values.email,
-                        slackId: values.slackId,
-                        role: values.role,
-                        password: values.password,
-                      },
-                    });
-                  }}
-                >
-                  {() => (
-                    <Form>
-                      <Column>
-                        <Heading>Add user</Heading>
-                        <StyledField
-                          type="text"
-                          name="name"
-                          placeholder="name"
-                        />
-                        <StyledField
-                          type="text"
-                          name="email"
-                          placeholder="email"
-                        />
-                        <StyledField
-                          type="text"
-                          name="password"
-                          placeholder="password"
-                        />
-                        <StyledField
-                          type="text"
-                          name="slackId"
-                          placeholder="slack id"
-                        />
-                        <StyledField as="select" name="role">
-                          <option value="user">user</option>
-                          <option value="admin">admin</option>
-                        </StyledField>
-                        <AddButton type="submit"> Add user</AddButton>
-                      </Column>
-                    </Form>
-                  )}
-                </Formik>
-              </FormWrapper>
-              <FormWrapper>
-                <Formik
-                  initialValues={{ userId: "" }}
-                  validate={(values) => {
-                    return {};
-                  }}
-                  onSubmit={(values) => {
-                    deleteUser({ variables: { id: values.userId } });
-                  }}
-                >
-                  {() => (
-                    <Form>
-                      <Column>
-                        <Heading>Delete user</Heading>
-                        <StyledField
-                          type="text"
-                          name="userId"
-                          placeholder="userId"
-                        />
-                        <DeleteButton type="submit">Delete user</DeleteButton>
-                      </Column>
-                    </Form>
-                  )}
-                </Formik>
-              </FormWrapper>
-            </FormSection>
-          </Column>
-        )}
-      </Column>
+              <FormSection>
+                <FormWrapper>
+                  <Formik
+                    initialValues={{
+                      name: "",
+                      email: "",
+                      slackId: "",
+                      password: "",
+                      role: "user",
+                    }}
+                    validate={(values) => {
+                      return {};
+                    }}
+                    onSubmit={(values) => {
+                      addUser({
+                        variables: {
+                          name: values.name,
+                          email: values.email,
+                          slackId: values.slackId,
+                          role: values.role,
+                          password: values.password,
+                        },
+                      });
+                    }}
+                  >
+                    {() => (
+                      <Form>
+                        <Column>
+                          <Heading>Add user</Heading>
+                          <StyledField
+                            type="text"
+                            name="name"
+                            placeholder="name"
+                          />
+                          <StyledField
+                            type="text"
+                            name="email"
+                            placeholder="email"
+                          />
+                          <StyledField
+                            type="text"
+                            name="password"
+                            placeholder="password"
+                          />
+                          <StyledField
+                            type="text"
+                            name="slackId"
+                            placeholder="slack id"
+                          />
+                          <StyledField as="select" name="role">
+                            <option value="user">user</option>
+                            <option value="admin">admin</option>
+                          </StyledField>
+                          <AddButton type="submit"> Add user</AddButton>
+                        </Column>
+                      </Form>
+                    )}
+                  </Formik>
+                </FormWrapper>
+                <FormWrapper>
+                  <Formik
+                    initialValues={{ userId: "" }}
+                    validate={(values) => {
+                      return {};
+                    }}
+                    onSubmit={(values) => {
+                      deleteUser({ variables: { id: values.userId } });
+                    }}
+                  >
+                    {() => (
+                      <Form>
+                        <Column>
+                          <Heading>Delete user</Heading>
+                          <StyledField
+                            type="text"
+                            name="userId"
+                            placeholder="userId"
+                          />
+                          <DeleteButton type="submit">Delete user</DeleteButton>
+                        </Column>
+                      </Form>
+                    )}
+                  </Formik>
+                </FormWrapper>
+              </FormSection>
+            </Column>
+          )}
+        </Column>
+      </>
     </RequireRole>
   );
 };

@@ -3,6 +3,7 @@ export * from "./kudos-list";
 export * from "./styled";
 export * from "./nav";
 export * from "./login";
-export * from "./private-route";
+export * from "./admin-login";
+export * from "./with-authentication";
 export * from "./require-role";
 export * from "./home";

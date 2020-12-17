@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { GET_TOKEN } from "./private-route";
+import { GET_TOKEN } from "./with-authentication";
 import { useQuery } from "@apollo/react-hooks";
 import * as jwt from "jsonwebtoken";
 

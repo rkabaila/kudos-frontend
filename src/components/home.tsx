@@ -11,6 +11,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Kudos } from "./kudos-list";
 import styled from "@emotion/styled";
+import { Nav } from "./nav";
 
 const GET_OWN_KUDOSES = gql`
   query {
@@ -57,11 +58,11 @@ export const Home = () => {
   const { loading: loadingWrittenKudoses, data: writtenKudoses } = useQuery(
     GET_WRITTEN_KUDOSES
   );
-  console.log(ownKudoses, writtenKudoses);
+
   return (
     <Column>
+      <Nav />
       <PageHeading>Home</PageHeading>
-
       <Heading>Own Kudoses</Heading>
       <TableWrapper>
         <HeaderWrapper>

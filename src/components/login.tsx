@@ -1,26 +1,13 @@
 import React from "react";
-import { Column, StyledField, Heading, AddButton, Row } from "./styled";
-import { Formik, Form } from "formik";
+import { Column, Row, Heading } from "./styled";
 import gql from "graphql-tag";
-import { useMutation, useApolloClient } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import { routes } from "../constants";
 import styled from "@emotion/styled";
 import { GoogleLogin } from "react-google-login";
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
-
-export const LOGIN = gql`
-  mutation Login($name: String!, $password: String!) {
-    login(name: $name, password: $password) {
-      token
-      user {
-        id
-        name
-      }
-    }
-  }
-`;
 
 export const GOOGLE_LOGIN = gql`
   mutation GoogleLogin($token: String!) {
@@ -34,20 +21,9 @@ export const GOOGLE_LOGIN = gql`
   }
 `;
 
-const FormWrapper = styled(Column)`
-  max-width: 350px;
-  margin: 30px auto;
-  height: 200px;
-  justify-content: space-between;
-`;
-
-const ButtonWrapper = styled(Column)`
-  align-self: flex-end;
-`;
-
 const GoogleWrapper = styled(Column)`
   width: 200px;
-  margin-left: 30px;
+  margin: 50px;
 `;
 
 const PageWrapper = styled(Row)`
@@ -59,19 +35,6 @@ const PageWrapper = styled(Row)`
 
 export const Login: React.FC = () => {
   const history = useHistory();
-  const client = useApolloClient();
-  const [login] = useMutation(LOGIN, {
-    onCompleted({ login }) {
-      if (!login.user) {
-        console.log("Wrong username or password.");
-        return;
-      }
-      localStorage.setItem("token", login.token);
-      client.writeData({ data: { token: login.token } });
-      history.push(routes.kudoses);
-    },
-    onError(error) {},
-  });
   const [googleLogin] = useMutation(GOOGLE_LOGIN, {
     onCompleted({ googleLogin }) {
       localStorage.setItem("token", googleLogin.token);
@@ -81,39 +44,8 @@ export const Login: React.FC = () => {
   });
   return (
     <PageWrapper>
-      <Formik
-        initialValues={{ name: "", password: "" }}
-        validate={(values) => {
-          return {};
-        }}
-        onSubmit={(values) => {
-          const { name, password } = values;
-          login({
-            variables: {
-              name,
-              password,
-            },
-          });
-        }}
-      >
-        {() => (
-          <Form>
-            <FormWrapper>
-              <Heading>Login</Heading>
-              <StyledField type="text" name="name" placeholder="name" />
-              <StyledField
-                type="password"
-                name="password"
-                placeholder="password"
-              />
-              <ButtonWrapper>
-                <AddButton type="submit">Login</AddButton>
-              </ButtonWrapper>
-            </FormWrapper>
-          </Form>
-        )}
-      </Formik>
       <GoogleWrapper>
+        <Heading>Login with:</Heading>
         <GoogleLogin
           clientId={clientId}
           hostedDomain="telesoftas.com"
