@@ -73,7 +73,7 @@ export const AdminLogin: React.FC = () => {
         {() => (
           <Form>
             <FormWrapper>
-              <Heading>Login</Heading>
+              <Heading>Admin Login</Heading>
               <StyledField type="text" name="name" placeholder="name" />
               <StyledField
                 type="password"

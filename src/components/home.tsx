@@ -1,3 +1,4 @@
+import "react-tabs/style/react-tabs.css";
 import React from "react";
 import {
   Column,
@@ -6,11 +7,16 @@ import {
   RowWrapper,
   PageHeading,
   Heading,
+  Row,
+  KudosCard,
+  KudosRow,
+  KudosAuthor,
 } from "./styled";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Kudos } from "./kudos-list";
 import styled from "@emotion/styled";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { Nav } from "./nav";
 
 const GET_OWN_KUDOSES = gql`
@@ -47,8 +53,9 @@ const GET_WRITTEN_KUDOSES = gql`
   }
 `;
 
-const TableWrapper = styled(Column)`
-  margin: 20px 0 40px 0;
+const Wrapper = styled(Column)`
+  max-width: 800px;
+  margin: auto;
 `;
 
 export const Home = () => {
@@ -60,43 +67,50 @@ export const Home = () => {
   );
 
   return (
-    <Column>
+    <>
       <Nav />
-      <PageHeading>Home</PageHeading>
-      <Heading>Own Kudoses</Heading>
-      <TableWrapper>
-        <HeaderWrapper>
-          <CellWrapper>Kudos id</CellWrapper>
-          <CellWrapper>Kudos text</CellWrapper>
-          <CellWrapper>Author</CellWrapper>
-          <CellWrapper> Recipient</CellWrapper>
-        </HeaderWrapper>
-        {ownKudoses?.userOwnKudoses.map((kudos: Kudos) => (
-          <RowWrapper key={kudos.id}>
-            <CellWrapper>{kudos.id} </CellWrapper>
-            <CellWrapper>{kudos.text}</CellWrapper>
-            <CellWrapper>{kudos.author.name}</CellWrapper>
-            <CellWrapper>{kudos.recipient.name}</CellWrapper>
-          </RowWrapper>
-        ))}
-      </TableWrapper>
-      <Heading>Written Kudoses</Heading>
-      <TableWrapper>
-        <HeaderWrapper>
-          <CellWrapper>Kudos id</CellWrapper>
-          <CellWrapper>Kudos text</CellWrapper>
-          <CellWrapper>Author</CellWrapper>
-          <CellWrapper> Recipient</CellWrapper>
-        </HeaderWrapper>
-        {writtenKudoses?.userWrittenKudoses.map((kudos: Kudos) => (
-          <RowWrapper key={kudos.id}>
-            <CellWrapper>{kudos.id} </CellWrapper>
-            <CellWrapper>{kudos.text}</CellWrapper>
-            <CellWrapper>{kudos.author.name}</CellWrapper>
-            <CellWrapper>{kudos.recipient.name}</CellWrapper>
-          </RowWrapper>
-        ))}
-      </TableWrapper>
-    </Column>
+      <Wrapper>
+        <PageHeading>Home</PageHeading>
+        <Tabs>
+          <TabList>
+            <Tab>
+              <Heading>
+                Your Kudoses ({ownKudoses?.userOwnKudoses.length})
+              </Heading>
+            </Tab>
+            <Tab>
+              <Heading>
+                You have sent Kudoses (
+                {writtenKudoses?.userWrittenKudoses.length})
+              </Heading>
+            </Tab>
+          </TabList>
+          <TabPanel>
+            <HeaderWrapper>
+              <CellWrapper>Who wrote</CellWrapper>
+              <CellWrapper>Kudos</CellWrapper>
+            </HeaderWrapper>
+            {ownKudoses?.userOwnKudoses.map((kudos: Kudos) => (
+              <KudosRow key={kudos.id}>
+                <KudosAuthor>{kudos.author.name}</KudosAuthor>
+                <KudosCard>{kudos.text}</KudosCard>
+              </KudosRow>
+            ))}
+          </TabPanel>
+          <TabPanel>
+            <HeaderWrapper>
+              <CellWrapper>To Whom sent</CellWrapper>
+              <CellWrapper>Kudos text</CellWrapper>
+            </HeaderWrapper>
+            {writtenKudoses?.userWrittenKudoses.map((kudos: Kudos) => (
+              <RowWrapper key={kudos.id}>
+                <CellWrapper>{kudos.recipient.name}</CellWrapper>
+                <CellWrapper>{kudos.text}</CellWrapper>
+              </RowWrapper>
+            ))}
+          </TabPanel>
+        </Tabs>
+      </Wrapper>
+    </>
   );
 };

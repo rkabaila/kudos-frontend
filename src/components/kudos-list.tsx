@@ -15,6 +15,7 @@ import {
   StyledField,
   Heading,
   PageHeading,
+  AdminPageWrapper,
 } from "./styled";
 import { RequireRole } from "./require-role";
 import { Nav } from "./nav";
@@ -104,7 +105,7 @@ export const KudosList: React.FC = () => {
     <RequireRole role="admin">
       <>
         <Nav />
-        <Column>
+        <AdminPageWrapper>
           <PageHeading>Kudoses</PageHeading>
           {loading ? (
             <p>Loading ...</p>
@@ -113,8 +114,8 @@ export const KudosList: React.FC = () => {
               <HeaderWrapper>
                 <CellWrapper>Kudos id</CellWrapper>
                 <CellWrapper>Kudos text</CellWrapper>
-                <CellWrapper>Author</CellWrapper>
-                <CellWrapper> Recipient</CellWrapper>
+                <CellWrapper>Who wrote</CellWrapper>
+                <CellWrapper>To Whom sent</CellWrapper>
               </HeaderWrapper>
 
               {data?.kudoses.map((kudos: Kudos) => (
@@ -198,7 +199,7 @@ export const KudosList: React.FC = () => {
               </FormSection>
             </Column>
           )}
-        </Column>
+        </AdminPageWrapper>
       </>
     </RequireRole>
   );

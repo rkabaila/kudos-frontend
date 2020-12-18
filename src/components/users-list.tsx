@@ -14,6 +14,8 @@ import {
   StyledField,
   Heading,
   PageHeading,
+  AdminPageWrapper,
+  SmallCellWrapper,
 } from "./styled";
 import { Form, Formik } from "formik";
 import { RequireRole } from "./require-role";
@@ -119,7 +121,7 @@ export const UsersList: React.FC = () => {
     <RequireRole role="admin">
       <>
         <Nav />
-        <Column>
+        <AdminPageWrapper>
           <PageHeading>Users</PageHeading>
           {loading ? (
             <p>Loading ...</p>
@@ -130,18 +132,17 @@ export const UsersList: React.FC = () => {
                 <CellWrapper>User slack id</CellWrapper>
                 <CellWrapper>User name</CellWrapper>
                 <CellWrapper>Email</CellWrapper>
-                <CellWrapper>Role</CellWrapper>
-                <CellWrapper>Own kudos</CellWrapper>
-                <CellWrapper>Written kudos</CellWrapper>
+                <SmallCellWrapper>Role</SmallCellWrapper>
+                <SmallCellWrapper>Points</SmallCellWrapper>
               </HeaderWrapper>
 
               {data?.users.map((user: User) => {
-                const ownKudosText = user.ownKudoses
-                  .map((kudos) => kudos.text)
-                  .join(", ");
-                const writtenKudosText = user.writtenKudoses
-                  .map((kudos) => kudos.text)
-                  .join(", ");
+                // const ownKudosText = user.ownKudoses
+                //   .map((kudos) => kudos.text)
+                //   .join(", ");
+                // const writtenKudosText = user.writtenKudoses
+                //   .map((kudos) => kudos.text)
+                //   .join(", ");
 
                 return (
                   <RowWrapper key={user.id}>
@@ -149,9 +150,10 @@ export const UsersList: React.FC = () => {
                     <CellWrapper>{user.slackId}</CellWrapper>
                     <CellWrapper>{user.name}</CellWrapper>
                     <CellWrapper>{user.email}</CellWrapper>
-                    <CellWrapper>{user.role}</CellWrapper>
-                    <CellWrapper>{ownKudosText}</CellWrapper>
-                    <CellWrapper>{writtenKudosText}</CellWrapper>
+                    <SmallCellWrapper>{user.role}</SmallCellWrapper>
+                    <SmallCellWrapper>
+                      {user.ownKudoses.length}
+                    </SmallCellWrapper>
                   </RowWrapper>
                 );
               })}
@@ -243,7 +245,7 @@ export const UsersList: React.FC = () => {
               </FormSection>
             </Column>
           )}
-        </Column>
+        </AdminPageWrapper>
       </>
     </RequireRole>
   );

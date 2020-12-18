@@ -26,6 +26,10 @@ const GoogleWrapper = styled(Column)`
   margin: 50px;
 `;
 
+const HeadingWrapper = styled(Column)`
+  margin-bottom: 20px;
+`;
+
 const PageWrapper = styled(Row)`
   justify-content: center;
   align-items: center;
@@ -45,7 +49,9 @@ export const Login: React.FC = () => {
   return (
     <PageWrapper>
       <GoogleWrapper>
-        <Heading>Login with:</Heading>
+        <HeadingWrapper>
+          <Heading>Login with:</Heading>
+        </HeadingWrapper>
         <GoogleLogin
           clientId={clientId}
           hostedDomain="telesoftas.com"
