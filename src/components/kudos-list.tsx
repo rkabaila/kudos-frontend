@@ -25,6 +25,7 @@ export interface Kudos {
   text: string;
   author: User;
   recipient: User;
+  category?: string;
 }
 
 export interface KudosData {
@@ -47,6 +48,7 @@ const GET_KUDOSES = gql`
         id
         name
       }
+      category
     }
   }
 `;
@@ -116,6 +118,7 @@ export const KudosList: React.FC = () => {
                 <CellWrapper>Kudos text</CellWrapper>
                 <CellWrapper>Who wrote</CellWrapper>
                 <CellWrapper>To Whom sent</CellWrapper>
+                <CellWrapper>Category</CellWrapper>
               </HeaderWrapper>
 
               {data?.kudoses.map((kudos: Kudos) => (
@@ -124,6 +127,7 @@ export const KudosList: React.FC = () => {
                   <CellWrapper>{kudos.text}</CellWrapper>
                   <CellWrapper>{kudos.author?.name}</CellWrapper>
                   <CellWrapper>{kudos.recipient?.name}</CellWrapper>
+                  <CellWrapper>{kudos?.category}</CellWrapper>
                 </RowWrapper>
               ))}
 
