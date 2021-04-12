@@ -7,8 +7,7 @@ import { routes } from "../constants";
 import styled from "@emotion/styled";
 import { GoogleLogin } from "react-google-login";
 
-const clientId =
-  process.env.REACT_APP_GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID || "";
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
 export const GOOGLE_LOGIN = gql`
   mutation GoogleLogin($token: String!) {
@@ -40,7 +39,6 @@ const PageWrapper = styled(Row)`
 
 export const Login: React.FC = () => {
   const history = useHistory();
-  console.log(clientId);
   const [googleLogin] = useMutation(GOOGLE_LOGIN, {
     onCompleted({ googleLogin }) {
       localStorage.setItem("token", googleLogin.token);
