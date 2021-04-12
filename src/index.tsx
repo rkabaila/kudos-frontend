@@ -9,7 +9,7 @@ import { setContext } from "apollo-link-context";
 import { App } from "./App";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000"
+  uri: "https://kudos-server.herokuapp.com/",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -19,14 +19,14 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : ""
-    }
+      authorization: token ? `Bearer ${token}` : "",
+    },
   };
 });
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: authLink.concat(httpLink)
+  link: authLink.concat(httpLink),
 });
 
 const WrappedApp = (
