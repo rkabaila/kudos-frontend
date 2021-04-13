@@ -19,6 +19,7 @@ import {
 } from "./styled";
 import { RequireRole } from "./require-role";
 import { Nav } from "./nav";
+import { Loading } from "./loading";
 
 export interface Kudos {
   id: string;
@@ -109,18 +110,15 @@ export const KudosList: React.FC = () => {
         <Nav />
         <AdminPageWrapper>
           <PageHeading>Kudoses</PageHeading>
-          {loading ? (
-            <p>Loading ...</p>
-          ) : (
-            <Column>
-              <HeaderWrapper>
-                <CellWrapper>Kudos id</CellWrapper>
-                <CellWrapper>Kudos text</CellWrapper>
-                <CellWrapper>Who wrote</CellWrapper>
-                <CellWrapper>To Whom sent</CellWrapper>
-                <CellWrapper>Category</CellWrapper>
-              </HeaderWrapper>
-
+          <Column>
+            <HeaderWrapper>
+              <CellWrapper>Kudos id</CellWrapper>
+              <CellWrapper>Kudos text</CellWrapper>
+              <CellWrapper>Who wrote</CellWrapper>
+              <CellWrapper>To Whom sent</CellWrapper>
+              <CellWrapper>Category</CellWrapper>
+            </HeaderWrapper>
+            <Loading loading={loading}>
               {data?.kudoses.map((kudos: Kudos) => (
                 <RowWrapper key={kudos.id}>
                   <CellWrapper>{kudos.id} </CellWrapper>
@@ -130,79 +128,76 @@ export const KudosList: React.FC = () => {
                   <CellWrapper>{kudos?.category}</CellWrapper>
                 </RowWrapper>
               ))}
-
-              <FormSection>
-                <FormWrapper>
-                  <Formik
-                    initialValues={{ text: "", authorId: "", recipientId: "" }}
-                    validate={(values) => {
-                      return {};
-                    }}
-                    onSubmit={(values) => {
-                      addKudos({
-                        variables: {
-                          text: values.text,
-                          authorId: values.authorId,
-                          recipientId: values.recipientId,
-                        },
-                      });
-                    }}
-                  >
-                    {() => (
-                      <Form>
-                        <Column>
-                          <Heading>Add kudos</Heading>
-                          <StyledField
-                            type="text"
-                            name="text"
-                            placeholder="text"
-                          />
-                          <StyledField
-                            type="text"
-                            name="authorId"
-                            placeholder="authorId"
-                          />
-                          <StyledField
-                            type="text"
-                            name="recipientId"
-                            placeholder="recipientId"
-                          />
-                          <AddButton type="submit"> Add kudos</AddButton>
-                        </Column>
-                      </Form>
-                    )}
-                  </Formik>
-                </FormWrapper>
-                <FormWrapper>
-                  <Formik
-                    initialValues={{ kudosId: "" }}
-                    validate={(values) => {
-                      return {};
-                    }}
-                    onSubmit={(values) => {
-                      deleteKudos({ variables: { id: values.kudosId } });
-                    }}
-                  >
-                    {() => (
-                      <Form>
-                        <Heading>Delete kudos</Heading>
-                        <Column>
-                          <StyledField
-                            type="text"
-                            name="kudosId"
-                            placeholder="kudosId"
-                          />
-                          <DeleteButton type="submit">
-                            Delete kudos
-                          </DeleteButton>
-                        </Column>
-                      </Form>
-                    )}
-                  </Formik>
-                </FormWrapper>
-              </FormSection>
-            </Column>
-          )}
+            </Loading>
+            <FormSection>
+              <FormWrapper>
+                <Formik
+                  initialValues={{ text: "", authorId: "", recipientId: "" }}
+                  validate={(values) => {
+                    return {};
+                  }}
+                  onSubmit={(values) => {
+                    addKudos({
+                      variables: {
+                        text: values.text,
+                        authorId: values.authorId,
+                        recipientId: values.recipientId,
+                      },
+                    });
+                  }}
+                >
+                  {() => (
+                    <Form>
+                      <Column>
+                        <Heading>Add kudos</Heading>
+                        <StyledField
+                          type="text"
+                          name="text"
+                          placeholder="text"
+                        />
+                        <StyledField
+                          type="text"
+                          name="authorId"
+                          placeholder="authorId"
+                        />
+                        <StyledField
+                          type="text"
+                          name="recipientId"
+                          placeholder="recipientId"
+                        />
+                        <AddButton type="submit"> Add kudos</AddButton>
+                      </Column>
+                    </Form>
+                  )}
+                </Formik>
+              </FormWrapper>
+              <FormWrapper>
+                <Formik
+                  initialValues={{ kudosId: "" }}
+                  validate={(values) => {
+                    return {};
+                  }}
+                  onSubmit={(values) => {
+                    deleteKudos({ variables: { id: values.kudosId } });
+                  }}
+                >
+                  {() => (
+                    <Form>
+                      <Heading>Delete kudos</Heading>
+                      <Column>
+                        <StyledField
+                          type="text"
+                          name="kudosId"
+                          placeholder="kudosId"
+                        />
+                        <DeleteButton type="submit">Delete kudos</DeleteButton>
+                      </Column>
+                    </Form>
+                  )}
+                </Formik>
+              </FormWrapper>
+            </FormSection>
+          </Column>
         </AdminPageWrapper>
       </>
     </RequireRole>

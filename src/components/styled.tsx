@@ -120,5 +120,5 @@ export const PageHeading = styled(Heading)`
 
 export const AdminPageWrapper = styled(Column)`
   max-width: 1280px;
-  margin: auto;
+  margin: 0 auto;
 `;
