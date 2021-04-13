@@ -31,6 +31,7 @@
     "typescript": "3.9.3"
   },
   "scripts": {
+    "start:local": "react-scripts start",
     "start": "node server/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
