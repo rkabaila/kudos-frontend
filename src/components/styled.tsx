@@ -1,13 +1,22 @@
 import styled from "@emotion/styled";
 import { Field } from "formik";
 
-export const Row = styled.div`
+interface ContainerProps {
+  fullHeight?: boolean;
+  fullWidth?: boolean;
+}
+
+export const Row = styled.div<ContainerProps>`
   display: flex;
+  ${({ fullHeight }) => fullHeight && "height: 100%"};
+  ${({ fullWidth }) => fullWidth && "width: 100%"};
 `;
 
-export const Column = styled.div`
+export const Column = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
+  ${({ fullHeight }) => fullHeight && "height: 100%"};
+  ${({ fullWidth }) => fullWidth && "width: 100%"};
 `;
 
 export const CellWrapper = styled(Column)`

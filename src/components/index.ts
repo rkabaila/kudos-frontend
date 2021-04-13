@@ -7,3 +7,4 @@ export * from "./admin-login";
 export * from "./with-authentication";
 export * from "./require-role";
 export * from "./home";
+export * from "./loading";

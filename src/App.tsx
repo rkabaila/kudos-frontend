@@ -7,6 +7,7 @@ import {
   Home,
   AdminLogin,
   WithAuthentication,
+  Column,
 } from "./components";
 import { routes } from "./constants";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -20,12 +21,15 @@ export const App: React.FC = () => {
   }, [client]);
 
   return (
-    <React.Fragment>
+    <Column fullHeight>
       <Global
         styles={css`
+          html,
+          body,
           body {
             font-family: "Open Sans", sans-serif;
             margin: 0;
+            height: 100%;
           }
         `}
       />
@@ -60,6 +64,6 @@ export const App: React.FC = () => {
           secret
         />
       </BrowserRouter>
-    </React.Fragment>
+    </Column>
   );
 };

@@ -7,7 +7,6 @@ import {
   RowWrapper,
   PageHeading,
   Heading,
-  Row,
   KudosCard,
   KudosRow,
   KudosAuthor,
@@ -18,6 +17,7 @@ import { Kudos } from "./kudos-list";
 import styled from "@emotion/styled";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { Nav } from "./nav";
+import { Loading } from "./loading";
 
 const GET_OWN_KUDOSES = gql`
   query {
@@ -69,7 +69,7 @@ export const Home = () => {
   return (
     <>
       <Nav />
-      <Wrapper>
+      <Wrapper fullHeight fullWidth>
         <PageHeading>Home</PageHeading>
         <Tabs>
           <TabList>
@@ -90,24 +90,28 @@ export const Home = () => {
               <CellWrapper>Who wrote</CellWrapper>
               <CellWrapper>Kudos</CellWrapper>
             </HeaderWrapper>
-            {ownKudoses?.userOwnKudoses.map((kudos: Kudos) => (
-              <KudosRow key={kudos.id}>
-                <KudosAuthor>{kudos.author.name}</KudosAuthor>
-                <KudosCard>{kudos.text}</KudosCard>
-              </KudosRow>
-            ))}
+            <Loading loading={loadingOwnKudoses}>
+              {ownKudoses?.userOwnKudoses.map((kudos: Kudos) => (
+                <KudosRow key={kudos.id}>
+                  <KudosAuthor>{kudos.author.name}</KudosAuthor>
+                  <KudosCard>{kudos.text}</KudosCard>
+                </KudosRow>
+              ))}
+            </Loading>
           </TabPanel>
           <TabPanel>
             <HeaderWrapper>
               <CellWrapper>To Whom sent</CellWrapper>
               <CellWrapper>Kudos text</CellWrapper>
             </HeaderWrapper>
-            {writtenKudoses?.userWrittenKudoses.map((kudos: Kudos) => (
-              <RowWrapper key={kudos.id}>
-                <CellWrapper>{kudos.recipient.name}</CellWrapper>
-                <CellWrapper>{kudos.text}</CellWrapper>
-              </RowWrapper>
-            ))}
+            <Loading loading={loadingWrittenKudoses}>
+              {writtenKudoses?.userWrittenKudoses.map((kudos: Kudos) => (
+                <RowWrapper key={kudos.id}>
+                  <CellWrapper>{kudos.recipient.name}</CellWrapper>
+                  <CellWrapper>{kudos.text}</CellWrapper>
+                </RowWrapper>
+              ))}
+            </Loading>
           </TabPanel>
         </Tabs>
       </Wrapper>
