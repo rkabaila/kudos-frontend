@@ -1,6 +1,4 @@
 import React, { FC } from "react";
-import { GET_TOKEN } from "./with-authentication";
-import { useQuery } from "@apollo/react-hooks";
 import * as jwt from "jsonwebtoken";
 
 interface RequireRoleProps {
@@ -13,8 +11,8 @@ interface DecodedToken {
 }
 
 export const RequireRole: FC<RequireRoleProps> = ({ role, children }) => {
-  const { data } = useQuery(GET_TOKEN);
-  const decodedToken = jwt.decode(data.token) as DecodedToken;
+  const token = localStorage.getItem("token");
+  const decodedToken = jwt.decode(token || "") as DecodedToken;
   const isAllowed = decodedToken && role === decodedToken.role;
 
   return isAllowed ? <React.Fragment> {children}</React.Fragment> : null;

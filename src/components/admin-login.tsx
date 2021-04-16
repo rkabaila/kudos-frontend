@@ -4,8 +4,8 @@ import { Formik, Form } from "formik";
 import gql from "graphql-tag";
 import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
-import { routes } from "../constants";
 import styled from "@emotion/styled";
+import { routes } from "../App";
 
 export const LOGIN = gql`
   mutation Login($name: String!, $password: String!) {
@@ -48,7 +48,7 @@ export const AdminLogin: React.FC = () => {
       }
       localStorage.setItem("token", login.token);
       client.writeData({ data: { token: login.token } });
-      history.push(routes.kudoses);
+      history.push(routes.kudoses.path);
     },
     onError(error) {},
   });

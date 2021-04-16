@@ -1,22 +1,56 @@
 import * as React from "react";
 import { Global, css } from "@emotion/core";
 import {
-  UsersList,
-  KudosList,
-  Login,
-  Home,
-  AdminLogin,
-  WithAuthentication,
   Column,
+  Login,
+  AdminLogin,
+  Home,
+  Logout,
+  KudosList,
+  UsersList,
 } from "./components";
-import { routes } from "./constants";
-import { BrowserRouter, Route } from "react-router-dom";
-import { Logout } from "./components/logout";
+import { Router, Switch } from "react-router-dom";
 import { useApolloClient } from "@apollo/react-hooks";
+import { Route } from "./components";
+import { createBrowserHistory } from "history";
+const history = createBrowserHistory();
 
-export const App: React.FC = () => {
+export const routes = {
+  users: {
+    path: "/users",
+    component: UsersList,
+    auth: true,
+  },
+  kudoses: {
+    path: "/kudoses",
+    component: KudosList,
+    auth: true,
+  },
+  home: {
+    path: "/home",
+    component: Home,
+    auth: true,
+  },
+  login: {
+    path: "/login",
+    component: Login,
+    auth: false,
+  },
+  adminLogin: {
+    path: "/admin_login",
+    component: AdminLogin,
+    auth: false,
+  },
+  logout: {
+    path: "/logout",
+    component: Logout,
+    auth: false,
+  },
+};
+
+export const App = () => {
   const client = useApolloClient();
-  React.useMemo(() => {
+  React.useEffect(() => {
     client.writeData({ data: { token: localStorage.getItem("token") } });
   }, [client]);
 
@@ -33,37 +67,17 @@ export const App: React.FC = () => {
           }
         `}
       />
-      <BrowserRouter>
-        <Route path={routes.login} component={Login} exact />
-        <Route path={routes.adminLogin} component={AdminLogin} exact />
-        <Route path={routes.logout} component={Logout} />
-        <Route
-          path={routes.home}
-          render={() => (
-            <WithAuthentication>
-              <Home />
-            </WithAuthentication>
-          )}
-        />
-        <Route
-          path={routes.users}
-          render={() => (
-            <WithAuthentication>
-              <UsersList />
-            </WithAuthentication>
-          )}
-          secret
-        />
-        <Route
-          path={routes.kudoses}
-          render={() => (
-            <WithAuthentication>
-              <KudosList />
-            </WithAuthentication>
-          )}
-          secret
-        />
-      </BrowserRouter>
+      <Router history={history}>
+        <Switch>
+          {Object.values(routes).map((route) => {
+            const { path, component, auth } = route;
+
+            return (
+              <Route key={path} path={path} component={component} auth={auth} />
+            );
+          })}
+        </Switch>
+      </Router>
     </Column>
   );
 };

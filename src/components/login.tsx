@@ -1,11 +1,11 @@
 import React from "react";
 import { Column, Row, Heading } from "./styled";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
-import { routes } from "../constants";
 import styled from "@emotion/styled";
 import { GoogleLogin } from "react-google-login";
+import { routes } from "../App";
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
@@ -39,10 +39,12 @@ const PageWrapper = styled(Row)`
 
 export const Login: React.FC = () => {
   const history = useHistory();
+  const client = useApolloClient();
   const [googleLogin] = useMutation(GOOGLE_LOGIN, {
     onCompleted({ googleLogin }) {
       localStorage.setItem("token", googleLogin.token);
-      history.push(routes.home);
+      client.writeData({ data: { token: googleLogin.token } });
+      history.push(routes.home.path);
     },
     onError(error) {},
   });
