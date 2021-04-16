@@ -6,6 +6,7 @@ import { useMutation, useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import styled from "@emotion/styled";
 import { routes } from "../App";
+import { saveToken } from "../utils";
 
 export const LOGIN = gql`
   mutation Login($name: String!, $password: String!) {
@@ -35,9 +36,7 @@ const PageWrapper = styled(Row)`
   align-items: center;
 `;
 
-//TODO move logic to utils, separate layer
-
-export const AdminLogin: React.FC = () => {
+export const AdminLogin = () => {
   const history = useHistory();
   const client = useApolloClient();
   const [login] = useMutation(LOGIN, {
@@ -46,11 +45,9 @@ export const AdminLogin: React.FC = () => {
         console.log("Wrong username or password.");
         return;
       }
-      localStorage.setItem("token", login.token);
-      client.writeData({ data: { token: login.token } });
+      saveToken(login.token, client);
       history.push(routes.kudoses.path);
     },
-    onError(error) {},
   });
 
   return (

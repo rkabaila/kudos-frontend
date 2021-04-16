@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import styled from "@emotion/styled";
 import { GoogleLogin } from "react-google-login";
 import { routes } from "../App";
+import { saveToken } from "../utils";
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
@@ -35,18 +36,14 @@ const PageWrapper = styled(Row)`
   align-items: center;
 `;
 
-//TODO move logic to utils, separate layer
-
-export const Login: React.FC = () => {
+export const Login = () => {
   const history = useHistory();
   const client = useApolloClient();
   const [googleLogin] = useMutation(GOOGLE_LOGIN, {
     onCompleted({ googleLogin }) {
-      localStorage.setItem("token", googleLogin.token);
-      client.writeData({ data: { token: googleLogin.token } });
+      saveToken(googleLogin.token, client);
       history.push(routes.home.path);
     },
-    onError(error) {},
   });
   return (
     <PageWrapper>

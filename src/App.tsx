@@ -13,6 +13,8 @@ import { Router, Switch } from "react-router-dom";
 import { useApolloClient } from "@apollo/react-hooks";
 import { Route } from "./components";
 import { createBrowserHistory } from "history";
+import { saveTokenToCache, getToken } from "./utils";
+
 const history = createBrowserHistory();
 
 export const routes = {
@@ -51,7 +53,8 @@ export const routes = {
 export const App = () => {
   const client = useApolloClient();
   React.useEffect(() => {
-    client.writeData({ data: { token: localStorage.getItem("token") } });
+    const token = getToken();
+    saveTokenToCache(token || "", client);
   }, [client]);
 
   return (

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import * as jwt from "jsonwebtoken";
+import { useToken } from "../hooks";
 
 interface RequireRoleProps {
   role: string;
@@ -11,7 +12,7 @@ interface DecodedToken {
 }
 
 export const RequireRole: FC<RequireRoleProps> = ({ role, children }) => {
-  const token = localStorage.getItem("token");
+  const token = useToken();
   const decodedToken = jwt.decode(token || "") as DecodedToken;
   const isAllowed = decodedToken && role === decodedToken.role;
 
